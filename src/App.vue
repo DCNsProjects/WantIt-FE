@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import vueHeader from './components/Header.vue'
-import mainCategories from './components/Categories.vue'
+import vueHeader from './components/common/Header.vue'
+import mainCategories from './components/main/Categories.vue'
 
 export default {
   name: 'App',
