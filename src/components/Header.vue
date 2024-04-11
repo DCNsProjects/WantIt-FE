@@ -9,7 +9,7 @@
                 <li class="nav-item"><a href="#" class="nav-link link-body-emphasis px-2"><i
                             class="fa-solid fa-calendar"></i> 예정된 경매품</a></li>
                 <li class="nav-item"><a href="#" class="nav-link link-body-emphasis px-2"><i
-                            class="fa-solid fa-splotch"></i> 찜한 경매</a></li>
+                            class="fa-solid fa-splotch"></i> 경매품 등록</a></li>
                 <li class="nav-item"><a href="#" class="nav-link link-body-emphasis px-2"><i
                             class="fa-solid fa-stamp"></i> 입찰중인 경매</a></li>
                 <li class="nav-item"><a href="#" class="nav-link link-body-emphasis px-2"><i
@@ -56,7 +56,7 @@ export default {
 
 .nav-item {
     padding: 0 3px;
-    font-size: 1.1rem;
+    font-size: 1.0rem;
     font-family: 'nngt';
 }
 
