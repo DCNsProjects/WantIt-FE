@@ -2,7 +2,7 @@
   <div id="App">
     <vueHeader></vueHeader>
     <RouterView />
-    <RouterView name="top"></RouterView>
+    <RouterView name="top" />
     <vueFooter></vueFooter>
   </div>
 </template>
