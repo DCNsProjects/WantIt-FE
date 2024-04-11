@@ -1,0 +1,92 @@
+<template>
+    <div id="myCarousel" class="carousel slide mb-3" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class=""
+                aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"
+                class=""></button>
+            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3" class="active"
+                aria-current="true"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item">
+                <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                    <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
+                </svg>
+                <div class="container">
+                    <div class="carousel-caption text-start">
+                        <h1>실시간 입찰 수 1위</h1>
+                        <p class="opacity-75">데이터 바인딩 필요</p>
+                        <p><a class="btn btn-lg btn-primary" href="#">바로가기</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                    <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
+                </svg>
+                <div class="container">
+                    <div class="carousel-caption">
+                        <h1>실시간 입찰 수 2위</h1>
+                        <p>데이터 바인딩 필요</p>
+                        <p><a class="btn btn-lg btn-primary" href="#">바로가기</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item active">
+                <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                    <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
+                </svg>
+                <div class="container">
+                    <div class="carousel-caption text-end">
+                        <h1>실시간 입찰 수 3위</h1>
+                        <p>데이터 바인딩 필요</p>
+                        <p><a class="btn btn-lg btn-primary" href="#">바로가기</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'Top3Items'
+}
+</script>
+
+<style scoped>
+@font-face {
+    font-family: 'jua';
+    src: url('../../assets/fonts/BMJUA_ttf.ttf') format('truetype');
+}
+
+.carousel-item {
+    height: 65vh;
+    min-height: 300px;
+    background: no-repeat center center scroll;
+    background-size: cover;
+}
+
+.btn {
+    background-color: #ccc0f6;
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+    color: black;
+}
+
+.carousel {
+    margin-bottom: -20px;
+}
+</style>

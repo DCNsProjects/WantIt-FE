@@ -1,22 +1,23 @@
 <template>
   <div id="App">
     <vueHeader></vueHeader>
-    <mainCategories></mainCategories>
+    <RouterView />
+    <RouterView name="top"></RouterView>
+    <vueFooter></vueFooter>
   </div>
 </template>
 
 <script>
-import vueHeader from './components/common/Header.vue'
-import mainCategories from './components/main/Categories.vue'
+import vueHeader from './components/global/Header.vue'
+import vueFooter from './components/global/Footer.vue'
 
 export default {
   name: 'App',
   components: {
     vueHeader,
-    mainCategories
+    vueFooter
   }
 }
 </script>
 
-<style>
-</style>
+<style></style>
