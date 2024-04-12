@@ -3,19 +3,44 @@
         <nav class="py-1 bg-body-tertiary border-bottom fixed-header">
             <div class="container d-flex flex-wrap">
                 <ul class="nav me-auto align-items-center">
-                    <span class="wantit fs-2"><i class="fa-brands fa-webflow"></i>
-                        원트잇</span>
-                    <li class="nav-item"><a href="#" class="nav-link link-body-emphasis px-2"><i
-                                class="fas fa-gavel"></i>
-                            진행중인 경매품</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link link-body-emphasis px-2"><i
-                                class="fa-solid fa-calendar"></i> 예정된 경매품</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link link-body-emphasis px-2"><i
-                                class="fa-solid fa-splotch"></i> 경매품 등록</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link link-body-emphasis px-2"><i
-                                class="fa-solid fa-stamp"></i> 입찰중인 경매</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link link-body-emphasis px-2"><i
-                                class="fa-solid fa-floppy-disk"></i> 내 정보</a></li>
+                    <router-link to="/">
+                        <span class="wantit fs-2"><i class="fa-brands fa-webflow"></i>
+                            원트잇</span>
+                    </router-link>
+                    <li class="nav-item dropdown hover-dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Auctions
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">진행중인 경매</a></li>
+                            <li><a class="dropdown-item" href="#">예정된 경매</a></li>
+                            <li><a class="dropdown-item" href="#">종료된 경매</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown hover-dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Point
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">포인트 관리</a></li>
+                            <li><a class="dropdown-item" href="#">포인트 내역</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown hover-dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            My Page
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">나의 경매품</a></li>
+                            <li><a class="dropdown-item" href="#">경매품 등록</a></li>
+                            <li><a class="dropdown-item" href="#">낙찰 내역</a></li>
+                            <li><a class="dropdown-item" href="#">관심 경매</a></li>
+                            <li><a class="dropdown-item" href="#">내 정보</a></li>
+                        </ul>
+                    </li>
                 </ul>
                 <ul class="nav align-items-center">
                     <li class="nav-item"><a href="#" class="nav-link link-body-emphasis px-2">로그인</a></li>
@@ -32,7 +57,13 @@
 
 <script>
 export default {
-    name: 'vueHeader'
+    name: 'vueHeader',
+
+    methods: {
+        homePage() {
+            this.$router.push('/');
+        }
+    }
 }
 </script>
 
@@ -47,10 +78,26 @@ export default {
     src: url('../../assets/fonts/BMHANNAPro.ttf') format('truetype');
 }
 
+a {
+    text-decoration: none;
+}
+
+.hover-dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.hover-dropdown .dropdown-toggle::after {
+    display: none;
+}
+
+.dropdown-toggle {
+    color: black;
+}
+
 .nav-item {
     padding: 0 3px;
-    font-size: 1.0rem;
-    font-family: 'nngt';
+    font-size: 1.2rem;
+    font-family: 'BM';
 }
 
 .form-control {
@@ -63,7 +110,8 @@ export default {
 
 .wantit {
     font-family: 'BM';
-    margin-right: 30px;
+    margin-right: 20px;
+    color: black;
 }
 
 .fixed-header {
