@@ -151,4 +151,8 @@ export default {
 .bg-body-tertiary {
     background-color: #f7f2f8 !important;
 }
+
+.main {
+    margin-top: 20px;
+}
 </style>

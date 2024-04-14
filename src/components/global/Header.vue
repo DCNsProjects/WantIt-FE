@@ -8,14 +8,14 @@
                             원트잇</span>
                     </router-link>
                     <li class="nav-item dropdown hover-dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
                             Auctions
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">진행중인 경매</a></li>
-                            <li><a class="dropdown-item" href="#">예정된 경매</a></li>
-                            <li><a class="dropdown-item" href="#">종료된 경매</a></li>
+                            <li><a class="dropdown-item">진행중인 경매</a></li>
+                            <li><a class="dropdown-item">예정된 경매</a></li>
+                            <li><a class="dropdown-item">종료된 경매</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown hover-dropdown">
@@ -24,35 +24,34 @@
                             Point
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">포인트 관리</a></li>
-                            <li><a class="dropdown-item" href="#">포인트 내역</a></li>
+                            <li><a class="dropdown-item">포인트 관리</a></li>
+                            <li><a class="dropdown-item">포인트 내역</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown hover-dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             My Page
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">나의 경매품</a></li>
-                            <li><a class="dropdown-item" href="#">경매품 등록</a></li>
-                            <li><a class="dropdown-item" href="#">낙찰 내역</a></li>
-                            <li><a class="dropdown-item" href="#">관심 경매</a></li>
-                            <li><a class="dropdown-item" href="#">내 정보</a></li>
+                            <li><a class="dropdown-item" @click="myAuctions" href="">나의 경매품</a></li>
+                            <li><a class="dropdown-item" @click="addProductPage" href="">경매품 등록</a></li>
+                            <li><a class="dropdown-item">낙찰 내역</a></li>
+                            <li><a class="dropdown-item">관심 경매</a></li>
+                            <li><a class="dropdown-item">내 정보</a></li>
                         </ul>
                     </li>
                 </ul>
                 <ul class="nav align-items-center">
+                    <form class="col-12 col-lg-auto mb-3 mb-lg-0 search-bar" role="search"><i class="bi bi-search"></i>
+                        <input type="search" class="form-control" placeholder="상품 이름으로 검색" aria-label="Search">
+                    </form>
                     <li class="nav-item"><a href="#" class="nav-link link-body-emphasis px-2">로그인</a></li>
                     <li class="nav-item"><a href="#" class="nav-link link-body-emphasis px-2">회원가입</a></li>
                 </ul>
             </div>
         </nav>
     </div>
-    <form class="col-12 col-lg-auto mb-3 mb-lg-0 search-bar" role="search">
-        <input type="search" class="form-control" placeholder="상품 이름으로 검색" aria-label="Search"><i
-            class="bi bi-search"></i>
-    </form>
 </template>
 
 <script>
@@ -60,8 +59,17 @@ export default {
     name: 'vueHeader',
 
     methods: {
+
         homePage() {
             this.$router.push('/');
+        },
+
+        addProductPage() {
+            this.$router.push('/add-Product');
+        },
+
+        myAuctions() {
+            this.$router.push('/my-Auctions');
         }
     }
 }
@@ -100,10 +108,6 @@ a {
     font-family: 'BM';
 }
 
-.form-control {
-    border-color: #ccc0f6;
-}
-
 .fa-brands {
     color: #ccc0f6;
 }
@@ -128,12 +132,15 @@ a {
 }
 
 .search-bar {
-    margin-top: 100px;
-    width: 500px;
+    width: 220px;
     position: relative;
     display: block;
     margin-left: auto;
-    margin-right: auto;
+    margin-right: 20px;
+}
+
+.form-control {
+    border-color: #ccc0f6;
 }
 
 .bi {
@@ -141,6 +148,10 @@ a {
     top: 50%;
     right: 10px;
     transform: translateY(-50%);
-    font-size: 1.5rem;
+    font-size: 1.3rem;
+}
+
+.dropdown-item {
+    cursor: pointer;
 }
 </style>
