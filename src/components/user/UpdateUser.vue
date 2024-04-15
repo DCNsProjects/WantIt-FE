@@ -10,32 +10,32 @@
   </div>
 
 
-  <div class="title">
-    <h2> My Profile </h2>
+  <div class="container">
+    <div class="title">
+      <h2> My Profile </h2>
+    </div>
+    <div class="custom-form3">
+      <div class="mb-3">
+        <label for="formGroupExampleInput2" class="form-label">닉네임</label>
+        <br><label for="formGroupExampleInput2" class="form-label">현재 닉네임 {{ currentNickname }} </label>
+        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="별명">
+      </div>
+      <div class="mb-3">
+        <label for="formGroupExampleInput2" class="form-label">전화번호</label>
+        <br><label for="formGroupExampleInput2" class="form-label">현재 전화번호 {{ currentPhoneNumber }}</label>
+        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="010-0000-0000">
+      </div>
+      <div class="mb-3">
+        <label for="formGroupExampleInput2" class="form-label">주소</label>
+        <br><label for="formGroupExampleInput2" class="form-label">현재 주소 {{ currentAddress }} </label>
+        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="주소">
+      </div>
+      <div class="mb-3">
+        <button type="button" class="btn btn-secondary btn-lg" @click="openModal">수정하기</button>
+        <br><button type="button" class="btn btn-secondary btn-lg" @click="updatePassword">비밀번호 수정하기</button>
+      </div>
+    </div>
   </div>
-  <div class="custom-form3">
-    <div class="mb-3">
-      <label for="formGroupExampleInput2" class="form-label">Nickname</label>
-      <br><label for="formGroupExampleInput2" class="form-label">Current Nickname {{currentNickname}} </label>
-      <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="별명">
-    </div>
-    <div class="mb-3">
-      <label for="formGroupExampleInput2" class="form-label">PhoneNumber</label>
-      <br><label for="formGroupExampleInput2" class="form-label">Current PhoneNumber {{ currentPhoneNumber }}</label>
-      <input type="text" class="form-control" id="formGroupExampleInput2"
-             placeholder="010-0000-0000">
-    </div>
-    <div class="mb-3">
-      <label for="formGroupExampleInput2" class="form-label">Address</label>
-      <br><label for="formGroupExampleInput2" class="form-label">Current Address {{currentAddress}} </label>
-      <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="주소">
-    </div>
-    <div class="mb-3">
-      <button type="button" class="btn btn-secondary btn-lg" @click="openModal">수정하기</button>
-      <br><button type="button" class="btn btn-secondary btn-lg" @click="updatePassword">비밀번호 수정하기</button>
-    </div>
-  </div>
-
 </template>
 <script>
 
@@ -87,7 +87,7 @@ div {
 }
 
 .custom-form3 * {
-  width: 50%;
+  width: 100%;
 }
 
 .btn {
@@ -98,6 +98,7 @@ div {
   width: 100%;
   display: flex;
   justify-content: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .black-bg {
