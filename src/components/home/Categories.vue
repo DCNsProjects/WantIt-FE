@@ -109,9 +109,20 @@
 
 <script>
 
+import axios from 'axios'
+import {ref, watchEffect} from 'vue'
+
+const todos = ref([])
+
+watchEffect(async () => {
+    const res = await axios.get("https://jsonplaceholder.typicode.com/todos")
+    todos.value = res.data
+})
+
 export default {
-    name: 'MainCategories',
+    name: "MainCategories"
 }
+
 </script>
 
 <style scoped>
