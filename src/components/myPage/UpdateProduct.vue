@@ -26,7 +26,8 @@
             </div>
             <div class="form-group">
                 <label for="auctionStartDate" class="form-label">경매 시작일</label>
-                <input type="date" id="auctionStartDate" v-model="auctionStartDate" required class="form-control">
+                <input type="date" id="auctionStartDate" v-model="auctionStartDate" required class="form-control"
+                    :min="today">
             </div>
             <div class="form-group">
                 <label for="productImage" class="form-label">상품 이미지</label>
@@ -46,7 +47,8 @@ export default {
             productDescription: '',
             auctionStartDate: '',
             auctionStartPrice: 0,
-            productImage: ''
+            productImage: '',
+            today: this.getToday()
         };
     },
     methods: {
@@ -63,6 +65,15 @@ export default {
 
             reader.readAsDataURL(file); // 파일 내용 읽기
         },
+
+        getToday() {
+            let today = new Date();
+            let dd = String(today.getDate() + 1).padStart(2, '0');
+            let mm = String(today.getMonth() + 1).padStart(2, '0');
+            let yyyy = today.getFullYear();
+            today = yyyy + '-' + mm + '-' + dd;
+            return today;
+        }
     }
 };
 </script>
