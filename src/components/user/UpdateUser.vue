@@ -8,8 +8,6 @@
       </div>
     </div>
   </div>
-
-
   <div class="container">
     <div class="title">
       <h2> My Profile </h2>
@@ -37,8 +35,8 @@
     </div>
   </div>
 </template>
-<script>
 
+<script>
 export default {
   name: 'App',
   data() {

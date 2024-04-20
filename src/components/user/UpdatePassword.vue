@@ -9,8 +9,6 @@
         </div>
       </div>
     </div>
-  
-  
     <div class="title">
       <h2> My Password </h2>
     </div>
@@ -33,11 +31,9 @@
         </button>
       </div>
     </div>
-  
-  
   </template>
-  <script>
   
+  <script>
   export default {
     name: 'App',
     data() {
