@@ -1,9 +1,9 @@
 <template>
   <div id="App">
-    <vueHeader></vueHeader>
+    <vueHeader />
     <RouterView name="top" />
     <RouterView />
-    <vueFooter></vueFooter>
+    <vueFooter />
   </div>
 </template>
 
@@ -15,9 +15,9 @@ export default {
   name: 'App',
   components: {
     vueHeader,
-    vueFooter
+    vueFooter,
   }
 }
 </script>
 
-<style></style>
+<style></style> 
