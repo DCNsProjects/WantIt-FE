@@ -1,13 +1,10 @@
 <template>
   <div class="container">
-    <div class="row" v-for="(row, rowIndex) in 3" :key="'row' + rowIndex">
+    <div class="row" v-for="item in finishedItems" :key="item.id">
       <div class="items finishedAuctionItems" style="margin-bottom: 40px">
         <div
           class="finishedAuctionCard"
-          style="width: 18rem"
-          v-for="auctionItem in auctionItems"
-          :key="auctionItem.auctionItemId"
-          @click="detail"
+          @click="detail(item.auctionItemId)"
         >
           <img
             src="https://www.seoulauction.com/nas_img/front/online0888/thum/d1aa1685-65ce-48cf-ae11-9a0d8f22f700.jpg"
@@ -15,13 +12,14 @@
             alt="..."
           />
           <div class="finishedAuctionCardBody">
-            <p class="card-text">{{ auctionItem.itemName }}</p>
+            <p class="card-text">{{ item.itemName }}</p>
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 <script>
 import axios from "axios";
 
@@ -29,17 +27,24 @@ export default {
   name: "App",
   data() {
     return {
-      auctionItems: []
+      finishedItems: [],
     };
   },
 
   methods: {
-    detail() {
-      this.$router.push("/finished-detail");
+    detail(auctionItemId) {
+      this.$router.push({
+        name: "finishedDetail",
+        path: "/finished-detail",
+        params: {
+          id: auctionItemId,
+        },
+      
+      });
     },
-    async getFinishedAuctionItemList() {
+    async getFinishedAuctionItems() {
       axios
-        .get("http://localhost:8081/v1/auction-items/finished?page=1&size=9", {
+        .get("http://localhost:8080/v1/auction-items/finished?page=1&size=5", {
           proxy: {
             protocol: "http",
             host: "127.0.0.1",
@@ -48,14 +53,13 @@ export default {
         })
         .then((response) => {
           const result = response.data;
-          console.log(response.data);
-          const auctionItems = result.data.responseDtoList;
-          this.auctionItems = auctionItems;
+          this.finishedItems = result.data.responseDtoList;
+          console.log(this.finishedItems);
         });
     },
   },
   created() {
-    this.getFinishedAuctionItemList();
+    this.getFinishedAuctionItems();
   },
 };
 </script>
