@@ -70,36 +70,44 @@ export default {
     },
 
     async logIn() {
-      const instance = await axios.create({
+      const instance = axios.create({
         baseURL: "http://localhost:8080",
-        proxy: {
-          protocol: "http",
-          host: "127.0.0.1",
-          port: 8080,
-        },
-      })
-      const response = await instance.post("/v1/users/login", {
-        email: this.email,
-        password: this.password,
-      })
+      });
 
-      console.log(response)
+      try {
+        const response = await instance.post("/v1/users/login", {
+          email: this.email,
+          password: this.password,
+        });
+
+        let accessToken = response.data;
+        console.log('accessToken:', accessToken);
+
+        accessToken = accessToken.replace('Bearer ', '');
 
 
+        axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`
+        console.log('axios:', "Bearer" +  accessToken);
 
-      const accessToken = response.data.accessToken
+        document.cookie = `accessToken=${accessToken}; path=/;`
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('isLoggedIn', 'true');
+        this.$router.push('/');
 
-      // 이후 통신에서 요청을 보낼 때 토큰을 가져가기 위한 코드
-      axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`
-      // 토큰을 브라우저의 어딘가에 저장해 두는 코드
-      // localStorage.setItem('accessToken', accessToken)
-      document.cookie = `accessToken=${accessToken}; path=/;`
+      } catch (error) {
+        if (error.response && error.response.data) {
+          alert(error.response.data.message);
+        } else {
+          alert('로그인에 실패했습니다. 다시 시도해주세요.');
+        }
+        localStorage.setItem('isLoggedIn', 'false');
+        localStorage.removeItem('accessToken');
+        console.log('isLoggedIn:', localStorage.getItem('isLoggedIn'));
+      }
 
-      this.$router.push('/');
-
+      console.log('isLoggedIn:', localStorage.getItem('isLoggedIn'));
     },
   },
-
 }
 </script>
 
