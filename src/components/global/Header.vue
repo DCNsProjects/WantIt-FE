@@ -93,7 +93,7 @@ export default {
         },
 
         finishedAuction() {
-            this.$router.push('/finished-Auction');
+            this.$router.push('/finished-auctions');
         },
 
         likedAuction() {

@@ -64,8 +64,14 @@ const routes = [
         component : Login
     },
     {
-        path: '/finished-auction',
+        name: 'finishedAuctions',
+        path: '/finished-auctions',
         component : FinishedAuction
+    },
+    {
+        name: 'finishedDetail',
+        path: '/finished-detail/:id',
+        component : FinishedAuctionItemDetail
     },
     {
         path: '/liked-auction',
@@ -83,10 +89,6 @@ const routes = [
         path: '/scheduled-auction',
         component : ScheduledAuction
     },
-    {
-        path: '/finished-detail',
-        component : FinishedAuctionItemDetail
-    }
 ]
 
 export const router = createRouter({

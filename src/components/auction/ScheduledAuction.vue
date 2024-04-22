@@ -30,9 +30,6 @@ export default {
   name: "ScheduledAuction",
 
   methods: {
-    formattedBid(finishedAuction) {
-      return finishedAuction.toLocaleString();
-    },
     async getScheduledItems() {
       axios
         .get("http://localhost:8080/v1/auction-items/ready?page=1&size=5", {
@@ -50,7 +47,6 @@ export default {
     },
     bid(auctionItemId){
         this.$router.push({
-            
             name: "bid",
             path: "/bids",
             params: {
