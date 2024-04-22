@@ -1,14 +1,22 @@
 <template>
   <div class="container">
-    <div v-for="i in 8" :key="i" class="card">
+    <div v-for="item in items" :key="item.auctionItemId" class="card">
       <div class="card-body">
         <div class="split-screen">
           <div class="left">
-            <h4 style="margin-left: -10%; margin-bottom: 30px">{{ auction }}</h4>
-            <div style="margin-left: -10%">현재 입찰가 {{ formattedBid(currentBidPrice) }}원</div>
-            <div style="margin-left: -10%; margin-top: 10px">경매 마감일 {{ endDate }}</div>
-            <button type="button" class="btn btn-outline-secondary"
-              style="margin-left: -10%; margin-top: 20px; width: 150px" @click="bid">
+            <h4 style="margin-left: -10%; margin-bottom: 30px">{{ item.itemName }}</h4>
+            <div style="margin-left: -10%">
+              현재 입찰가 {{ formattedBid(currentBidPrice) }}원
+            </div>
+            <div style="margin-left: -10%; margin-top: 10px">
+              경매 마감일 {{ item.endDate }}
+            </div>
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              style="margin-left: -10%; margin-top: 20px; width: 150px"
+              @click="bid"
+            >
               상세보기
             </button>
           </div>
@@ -25,26 +33,44 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "App",
+  data() {
+    return {
+      items: [],
+      currentBidPrice: 1000000
+    };
+  },
   methods: {
     bid() {
       this.$router.push("/bid");
     },
-
     formattedBid(auctionItems) {
-            return auctionItems.toLocaleString();
-        },
+      return auctionItems.toLocaleString();
+    },
+    async getAuctionItemList() {
+      axios
+        .get("http://localhost:8081/v1/auction-items?page=1&size=5", {
+          proxy: {
+            protocol: "http",
+            host: "127.0.0.1",
+            port: 8080,
+          },
+        })
+        .then((response) => {
+          const result = response.data;
+          console.log(response.data);
+          const items = result.data.responseDtoList;
+          this.items = items;
+        });
+    },
   },
-
-  data() {
-    return {
-      auction: "골동품 춘식이",
-      currentBidPrice: 1000000,
-      endDate: "2024-04-12",
-    }
+  created() {
+    this.getAuctionItemList();
   },
-}
+};
 </script>
 
 <style scoped>

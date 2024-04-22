@@ -1,12 +1,21 @@
 <template>
   <div class="container">
     <div class="row" v-for="(row, rowIndex) in 3" :key="'row' + rowIndex">
-      <div class="items finishedAuctionItems" style="margin-bottom: 40px;">
-        <div class="finishedAuctionCard" style="width: 18rem;" v-for="(item, index) in items" :key="'card' + index" @click="detail">
-          <img src="https://www.seoulauction.com/nas_img/front/online0888/thum/d1aa1685-65ce-48cf-ae11-9a0d8f22f700.jpg"
-            class="card-img-top" alt="...">
+      <div class="items finishedAuctionItems" style="margin-bottom: 40px">
+        <div
+          class="finishedAuctionCard"
+          style="width: 18rem"
+          v-for="auctionItem in auctionItems"
+          :key="auctionItem.auctionItemId"
+          @click="detail"
+        >
+          <img
+            src="https://www.seoulauction.com/nas_img/front/online0888/thum/d1aa1685-65ce-48cf-ae11-9a0d8f22f700.jpg"
+            class="card-img-top"
+            alt="..."
+          />
           <div class="finishedAuctionCardBody">
-            <p class="card-text">장덕철 작가님 그림</p>
+            <p class="card-text">{{ auctionItem.itemName }}</p>
           </div>
         </div>
       </div>
@@ -14,26 +23,46 @@
   </div>
 </template>
 <script>
+import axios from "axios";
 
 export default {
-  name: 'App',
+  name: "App",
   data() {
     return {
-      items: Array(3).fill()
-    }
+      auctionItems: []
+    };
   },
 
   methods: {
     detail() {
-      this.$router.push('/finished-detail');
-    }
-  }
-}
+      this.$router.push("/finished-detail");
+    },
+    async getFinishedAuctionItemList() {
+      axios
+        .get("http://localhost:8081/v1/auction-items/finished?page=1&size=9", {
+          proxy: {
+            protocol: "http",
+            host: "127.0.0.1",
+            port: 8080,
+          },
+        })
+        .then((response) => {
+          const result = response.data;
+          console.log(response.data);
+          const auctionItems = result.data.responseDtoList;
+          this.auctionItems = auctionItems;
+        });
+    },
+  },
+  created() {
+    this.getFinishedAuctionItemList();
+  },
+};
 </script>
 
 <style scoped>
 body {
-  margin: 0
+  margin: 0;
 }
 
 div {
@@ -57,8 +86,8 @@ div {
   word-wrap: break-word;
   background-color: #fff;
   background-clip: border-box;
-  border: 1px solid rgba(0, 0, 0, .125);
-  border-radius: .25rem;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
   width: calc(33.33%);
   height: 200px !important;
   margin: 0.5rem 30px 0 30px;
@@ -67,8 +96,8 @@ div {
 
 .finishedAuctionCard img {
   width: 100%;
-  border-top-left-radius: calc(.25rem - 1px);
-  border-top-right-radius: calc(.25rem - 1px);
+  border-top-left-radius: calc(0.25rem - 1px);
+  border-top-right-radius: calc(0.25rem - 1px);
   max-height: 120px !important;
   object-fit: cover !important;
 }

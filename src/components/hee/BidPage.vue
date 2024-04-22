@@ -151,11 +151,11 @@
       </div>
       <div class="card">
         <div class="card-body">
-          <h4 class="product name">{{ 상품명 }}</h4>
-          <div>{{ 상품설명 }}</div>
+          <h4 class="product name">{{ item.itemName }}</h4>
+          <div>{{ item.itemDescription }}</div>
         </div>
       </div>
-      <div class="date">경매 종료일: {{ 경매종료일 }}</div>
+      <div class="date">경매 종료일: {{ item.endDate }}</div>
       <hr />
       <div class="d-grid gap-4 d-md-flex justify-content-md-end bid-btn">
         <button class="btn btn-secondary w-75" type="button" @click="입찰하기 = true">
@@ -187,19 +187,33 @@
   </div>
 </template>
 <script>
+import axios from "axios";
+
 export default {
   name: "App",
   data() {
     return {
+      item: [],
       호가정책: false,
       낙찰수수료: false,
       입찰하기: false,
-      실시간호가: "300,000원",
-      경매종료일: "2024/04/30",
-      상품명: "골동품 춘식이",
-      상품설명:
-        "물건을 경매하여 쉽게 거래할 수 있는 편리한 플랫폼 Wantit! 안전한 결제 시스템과 실시간 경매 진행 상황 확인 기능을 제공하여 편리한 거래 가능! 경매를 통해 다양한 물건을 저렴하게 구매하거나 판매해보세요!",
+      // 실시간호가: "300,000원",
+      // 경매종료일: "2024/04/30",
+      // 상품명: "골동품 춘식이",
+      // 상품설명:
+      //   "물건을 경매하여 쉽게 거래할 수 있는 편리한 플랫폼 Wantit! 안전한 결제 시스템과 실시간 경매 진행 상황 확인 기능을 제공하여 편리한 거래 가능! 경매를 통해 다양한 물건을 저렴하게 구매하거나 판매해보세요!",
     };
+  },
+  methods: {
+    async getAuctionItem() {
+      const response = await axios.get("http://localhost:8080/v1/auction-items/1");
+      const item = response.data.data;
+
+      this.item = item;
+    },
+  },
+  created() {
+    this.initializeAuthentication();
   },
   components: {},
 };
