@@ -80,13 +80,11 @@ export default {
           password: this.password,
         });
 
+
         let accessToken = response.data;
-        console.log('accessToken:', accessToken);
+        console.log('response.data:', response.data);
 
-        accessToken = accessToken.replace('Bearer ', '');
-
-
-        axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`
+        axios.defaults.headers.common.Authorization = `${accessToken}`
         console.log('axios:', "Bearer" +  accessToken);
 
         document.cookie = `accessToken=${accessToken}; path=/;`
