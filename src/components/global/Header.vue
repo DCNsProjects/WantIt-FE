@@ -65,11 +65,11 @@ export default {
         },
 
         addProductPage() {
-            this.$router.push('/add-Product');
+            this.$router.push('/add-product');
         },
 
         myAuctions() {
-            this.$router.push('/my-Auctions');
+            this.$router.push('/my-auctions');
         },
 
         point() {
@@ -77,11 +77,11 @@ export default {
         },
 
         pointLog() {
-            this.$router.push('/point-Log');
+            this.$router.push('/point-log');
         },
 
         inProgress() {
-            this.$router.push('/in-Progress');
+            this.$router.push('/in-progress');
         },
 
         login() {
@@ -89,7 +89,7 @@ export default {
         },
 
         signUp() {
-            this.$router.push('/sign-Up');
+            this.$router.push('/sign-up');
         },
 
         finishedAuction() {
@@ -97,15 +97,15 @@ export default {
         },
 
         likedAuction() {
-            this.$router.push('/liked-Auction');
+            this.$router.push('/liked-auction');
         },
 
         updateUser() {
-            this.$router.push('/update-User');
+            this.$router.push('/update-user');
         },
 
         scheduledAuction() {
-            this.$router.push('/scheduled-Auction');
+            this.$router.push('/scheduled-auction');
         }
     }
 }

@@ -145,9 +145,7 @@
         <div class="price-wrapper">
           <div class="price-wrapper2">
             <div class="max-price">현재 최고가</div>
-            <div class="price">
-              {{ item.minPrice }}
-            </div>
+            <div class="price">{{ formattedBid(item.minPrice) }} 원</div>
           </div>
         </div>
         <div class="card">
@@ -199,22 +197,20 @@ export default {
   name: "App",
   data() {
     return {
+      price: 0,
       item: {},
       호가정책: false,
       낙찰수수료: false,
       입찰하기: false,
-      실시간호가: "300,000원",
     };
   },
-  created() {
-    console.log(this.$route.params.id);
-    this.getAuctionItem(this.$route.params.id);
-    
-  },
   methods: {
+    formattedBid(price) {
+      return price !== undefined ? price.toLocaleString() : '0';
+    },
     async getAuctionItem(auctionItemId) {
       axios
-        .get("http://localhost:8080/v1/auction-items/"+auctionItemId, {
+        .get("http://localhost:8080/v1/auction-items/" + auctionItemId, {
           proxy: {
             protocol: "http",
             host: "127.0.0.1",
@@ -227,7 +223,11 @@ export default {
           this.item = result.data;
         });
     },
-  },  
+  },
+  created() {
+    console.log(this.$route.params.id);
+    this.getAuctionItem(this.$route.params.id);
+  },
 };
 </script>
 

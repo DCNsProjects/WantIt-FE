@@ -31,6 +31,7 @@ const routes = [
         component: AddProduct
     },
     {
+        name: 'my-auctions',
         path: '/my-auctions',
         component: MyAuctions
     },
@@ -47,11 +48,12 @@ const routes = [
         component : Point
     },
     {
+        name: 'inProgress',
         path: '/in-progress',
         component : InProgress
     },
     {
-        name: 'bid',
+        name: 'bids',
         path: '/bids/:id',
         component : Bid
     },

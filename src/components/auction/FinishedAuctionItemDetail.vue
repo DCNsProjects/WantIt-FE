@@ -12,8 +12,8 @@
     <hr class="finishedDetail_line" />
     <div class="finishedDetail_description">
       <p>{{item.itemDescription}}</p>
-      <p>{{item.minPrice}} 원</p>
-      <p>{{item.winPrice}} 원</p>
+      <p>시작가 : {{formattedBid(item.minPrice)}} 원</p>
+      <p>낙찰가 : {{formattedBid(item.winPrice)}} 원</p>
     </div>
     <button type="button" class="btn btn-outline-dark" @click="goToList">
       닫기
@@ -34,6 +34,9 @@ export default {
   methods: {
     goToList() {
       this.$router.push("/finished-auctions");
+    },
+    formattedBid(price) {
+      return price !== undefined ? price.toLocaleString() : '0';
     },
     async getAuctionItem(auctionItemId) {
       axios
