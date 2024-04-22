@@ -51,7 +51,8 @@ const routes = [
         component : InProgress
     },
     {
-        path: '/bid',
+        name: 'bid',
+        path: '/bids/:id',
         component : Bid
     },
     {

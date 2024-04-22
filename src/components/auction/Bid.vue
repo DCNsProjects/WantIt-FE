@@ -146,7 +146,7 @@
           <div class="price-wrapper2">
             <div class="max-price">현재 최고가</div>
             <div class="price">
-              {{ 실시간호가 }}
+              {{ item.minPrice }}
             </div>
           </div>
         </div>
@@ -159,7 +159,11 @@
         <div class="date">경매 종료일: {{ item.endDate }}</div>
         <hr />
         <div class="d-grid gap-4 d-md-flex justify-content-md-end bid-btn">
-          <button class="btn btn-secondary w-75" type="button" @click="입찰하기 = true">
+          <button
+            class="btn btn-secondary w-75"
+            type="button"
+            @click="입찰하기 = true"
+          >
             입찰하기
           </button>
           <button class="btn btn-secondary w-25" type="button">
@@ -202,10 +206,15 @@ export default {
       실시간호가: "300,000원",
     };
   },
+  created() {
+    console.log(this.$route.params.id);
+    this.getAuctionItem(this.$route.params.id);
+    
+  },
   methods: {
-    async getAuctionItem() {
+    async getAuctionItem(auctionItemId) {
       axios
-        .get("http://localhost:8081/v1/auction-items/1", {
+        .get("http://localhost:8080/v1/auction-items/"+auctionItemId, {
           proxy: {
             protocol: "http",
             host: "127.0.0.1",
@@ -213,16 +222,12 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response)
+          console.log(response);
           const result = response.data;
-          const item = result.data;
-          this.item = item;
+          this.item = result.data;
         });
     },
-  },
-  created() {
-    this.getAuctionItem();
-  },
+  },  
 };
 </script>
 
