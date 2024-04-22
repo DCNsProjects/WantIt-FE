@@ -1,12 +1,14 @@
 <template>
   <div class="container">
-    <div v-for="item in items" :key="item.auctionItemId" class="card">
+    <div v-for="item in items" :key="item.id" class="card">
       <div class="card-body">
         <div class="split-screen">
           <div class="left">
-            <h4 style="margin-left: -10%; margin-bottom: 30px">{{ item.itemName }}</h4>
+            <h4 style="margin-left: -10%; margin-bottom: 30px">
+              {{ item.itemName }}
+            </h4>
             <div style="margin-left: -10%">
-              현재 입찰가 {{ formattedBid(currentBidPrice) }}원
+              현재 입찰가 {{ formattedBid(item.minPrice) }}원
             </div>
             <div style="margin-left: -10%; margin-top: 10px">
               경매 마감일 {{ item.endDate }}
@@ -15,7 +17,7 @@
               type="button"
               class="btn btn-outline-secondary"
               style="margin-left: -10%; margin-top: 20px; width: 150px"
-              @click="bid"
+              @click="bid(item.auctionItemId)"
             >
               상세보기
             </button>
@@ -40,28 +42,37 @@ export default {
   data() {
     return {
       items: [],
-      currentBidPrice: 1000000
+      currentBidPrice: 1000000,
     };
   },
   methods: {
-    bid() {
-      this.$router.push("/bid");
+    bid(auctionItemId) {
+      this.$router.push({
+        name: "bids",
+        path: "/bids",
+        params: {
+          id: auctionItemId,
+        },
+      });
     },
-    formattedBid(auctionItems) {
-      return auctionItems.toLocaleString();
+    formattedBid(price) {
+      return price !== undefined ? price.toLocaleString() : '0';
     },
     async getAuctionItemList() {
       axios
-        .get("http://localhost:8081/v1/auction-items?page=1&size=5", {
-          proxy: {
-            protocol: "http",
-            host: "127.0.0.1",
-            port: 8080,
-          },
-        })
+        .get(
+          "http://localhost:8080/v1/auction-items/in-progress?page=1&size=5",
+          {
+            proxy: {
+              protocol: "http",
+              host: "127.0.0.1",
+              port: 8080,
+            },
+          }
+        )
         .then((response) => {
           const result = response.data;
-          console.log(response.data);
+          console.log(result);
           const items = result.data.responseDtoList;
           this.items = items;
         });

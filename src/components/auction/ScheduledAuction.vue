@@ -11,10 +11,10 @@
           alt="items"
         />
         <p class="card-text">{{ item.description }}</p>
-        <p class="card-text">
-          경매 시작 금액 : {{item.minPrice }}원
-        </p>
-        <a href="#" class="btn btn-primary" @click="bid(item.auctionItemId)">상세보기</a>
+        <p class="card-text">경매 시작 금액 : {{ formattedBid(item.minPrice) }}원</p>
+        <a href="#" class="btn btn-primary" @click="bid(item.auctionItemId)"
+          >상세보기</a
+        >
       </div>
       <div class="card-footer text-body-secondary">
         <p class="card-text">경매 시작 일자 : {{ item.startDate }}</p>
@@ -45,15 +45,18 @@ export default {
           console.log(this.scheduledItems);
         });
     },
-    bid(auctionItemId){
-        this.$router.push({
-            name: "bid",
-            path: "/bids",
-            params: {
-                id: auctionItemId
-            }
-        })
-    }
+    formattedBid(price) {
+      return price !== undefined ? price.toLocaleString() : '0';
+    },
+    bid(auctionItemId) {
+      this.$router.push({
+        name: "bids",
+        path: "/bids",
+        params: {
+          id: auctionItemId,
+        },
+      });
+    },
   },
   created() {
     this.getScheduledItems();
