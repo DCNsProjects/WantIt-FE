@@ -17,9 +17,9 @@
         <div class="form-check text-start my-3">
           <input class="form-check-input" type="checkbox" value="remember-me"
                  id="flexCheckDefault">
-          <label class="form-check-label" for="flexCheckDefault">
-            자동 로그인
-          </label>
+<!--          <label class="form-check-label" for="flexCheckDefault">-->
+<!--            자동 로그인-->
+<!--          </label>-->
         </div>
         <div>
           <button type="submit" class="btn btn-primary w-100 py-2 sign-in-button" @click="fnLogin">
@@ -44,8 +44,7 @@ export default {
     }
   },
   methods: {
-    fnLogin(event) {
-
+    async fnLogin(event) {
       event.preventDefault();
 
       if (this.email === '') {
@@ -59,37 +58,20 @@ export default {
       }
       //로그인 API 호출
       try {
-        this.logIn()
-      } catch (err) {
-        if (err.message.indexOf('Network Error') > -1) {
-          alert('서버에 접속할 수 없습니다. 상태를 확인해주세요.')
-        } else {
-          alert('로그인 정보를 확인할 수 없습니다.')
-        }
-      }
-    },
-
-    async logIn() {
-      const instance = axios.create({
-        baseURL: "http://localhost:8080",
-      });
-
-      try {
-        const response = await instance.post("/v1/users/login", {
+        const response = await axios.post("http://localhost:8080/v1/users/login", {
           email: this.email,
           password: this.password,
         });
 
+        const accessToken = response.data.data;
+        console.log('accessToken :', accessToken);
 
-        let accessToken = response.data;
-        console.log('response.data:', response.data);
+        // 기존 토큰 삭제
+        this.removeTokens();
 
-        axios.defaults.headers.common.Authorization = `${accessToken}`
-        console.log('axios:', "Bearer" +  accessToken);
+        // 토큰 저장
+        this.saveTokens(accessToken);
 
-        document.cookie = `accessToken=${accessToken}; path=/;`
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('isLoggedIn', 'true');
         this.$router.push('/');
 
       } catch (error) {
@@ -98,12 +80,24 @@ export default {
         } else {
           alert('로그인에 실패했습니다. 다시 시도해주세요.');
         }
-        localStorage.setItem('isLoggedIn', 'false');
-        localStorage.removeItem('accessToken');
-        console.log('isLoggedIn:', localStorage.getItem('isLoggedIn'));
+        this.removeTokens();
       }
+    },
 
-      console.log('isLoggedIn:', localStorage.getItem('isLoggedIn'));
+    removeTokens() {
+      // 기존 토큰 삭제
+      localStorage.removeItem('accessToken');
+      document.cookie = `accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    },
+    saveTokens(accessToken) {
+      // 토큰 저장
+      document.cookie = `accessToken=${accessToken}; path=/;`
+      localStorage.setItem('accessToken', accessToken);
+
+      // 자동 로그인 체크 시 쿠키 설정
+      if (this.rememberMe) {
+        document.cookie = `accessToken=${accessToken}; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
+      }
     },
   },
 }
