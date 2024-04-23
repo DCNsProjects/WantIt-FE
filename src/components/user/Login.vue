@@ -81,8 +81,8 @@ export default {
         });
 
 
-        let accessToken = response.data;
-        console.log('response.data:', response.data);
+        let accessToken = response.data.data;
+        console.log('accessToken :', accessToken);
 
         axios.defaults.headers.common.Authorization = `${accessToken}`
         console.log('axios:', "Bearer" +  accessToken);

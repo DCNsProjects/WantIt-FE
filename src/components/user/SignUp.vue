@@ -268,30 +268,30 @@ div {
   width: 55px !important;
 }
 
+.container {
+  z-index: 999; /* Lower z-index */
+  position: relative; /* To make z-index work */
+}
+
 .black-bg {
-  background-color: rgba(0, 0, 0, 0.7); /* Black background with 70% opacity */
-  position: fixed; /* Fixed position */
-  z-index: 1000; /* Sit on top */
-  left: 0; /* Full width */
-  top: 0; /* Full height */
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  display: flex; /* Enable flex */
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  padding: 20px;
+  z-index: 1001; /* Increased z-index */
 }
 
 .white-bg {
-  width: 20%;
+  width: 25%;
   background: white;
   border-radius: 8px;
   padding: 20px;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, 0);
-  text-align: center;
   position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
 }
 
 .mb-3.inputElement {
