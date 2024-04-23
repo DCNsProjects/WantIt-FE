@@ -9,7 +9,7 @@
         <div class="info">
           <p class="bid">현재 입찰 금액: {{ formattedBid(item.minPrice) }}</p>
 
-          <button class="btn btn-primary" type="submit" @click="updatePage">
+          <button class="btn btn-primary" type="submit" @click="updateProduct(item.auctionItemId)">
             경매 수정
           </button>
         </div>
@@ -58,9 +58,14 @@ export default {
         ? auctionItems.slice(0, 150) + "..."
         : auctionItems;
     },
-
-    updatePage() {
-      this.$router.push("/update-product");
+    updateProduct(auctionItemId) {
+      this.$router.push({
+        name: "update-product",
+        path: "/update-product",
+        params: {
+          id: auctionItemId,
+        },
+      });
     },
   },
 };
