@@ -19,7 +19,7 @@
             <div class="hstack gap-3">
               <div class="description">{{ item.details }}</div>
               <!-- <div class="withdraw">{{ item.status }}</div> -->
-              <div class="amount">{{ item.changedPoint }} points</div>
+              <div class="amount">{{ formattedBid(item.changedPoint) }} points</div>
             </div>
           </div>
         </div>
@@ -98,6 +98,9 @@ export default {
           const result = response.data;
           this.items = result.data.pointLogResponseDtoList;
         });
+    },
+    formattedBid(price) {
+      return price !== undefined ? price.toLocaleString() : '0';
     },
   },
   components: {},
