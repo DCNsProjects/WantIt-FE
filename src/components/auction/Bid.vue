@@ -189,7 +189,11 @@
           <button class="btn btn-secondary w-75" type="button" @click="입찰하기 = true">
             입찰하기
           </button>
-          <button class="btn btn-secondary w-25" type="button" @click="like(auctionItemId)">
+          <button
+            class="btn btn-secondary w-25"
+            type="button"
+            @click="like()"
+          >
             <i class="bi bi-bookmark-heart-fill"></i>
           </button>
         </div>
@@ -250,15 +254,16 @@ export default {
           this.item = result.data;
         });
     },
-    async like(auctionItemId) {
-      await axios.post("http://localhost:8080/v1/auctions/" + auctionItemId + "/likes", {
+    async like() {
+      console.log(localStorage.getItem("accessToken"));
+      await axios.post("http://localhost:8080/v1/auctions/" + this.auctionItemId + "/likes", null, {
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+        },
         proxy: {
           protocol: "http",
           host: "127.0.0.1",
           port: 8080,
-        },
-        headers: {
-          Authorization: localStorage.getItem("accessToken"),
         },
       });
     },
@@ -291,7 +296,7 @@ export default {
   created() {
     console.log(this.$route.params.id);
     this.getAuctionItem(this.$route.params.id);
-    this.auctionItemId = this.$route.params.id
+    this.auctionItemId = this.$route.params.id;
   },
 };
 </script>
