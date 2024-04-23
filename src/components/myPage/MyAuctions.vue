@@ -9,7 +9,7 @@
         <div class="info">
           <p class="bid">현재 입찰 금액: {{ formattedBid(item.minPrice) }}</p>
 
-          <button class="btn btn-primary" type="submit" @click="updatePage">
+          <button class="btn btn-primary" type="submit" @click="updateProduct(item.auctionItemId)">
             경매 수정
           </button>
         </div>
@@ -20,10 +20,11 @@
 
 <script>
 import axios from "axios";
+
 export default {
   data() {
     return {
-      auctionItems:[],
+      auctionItems: [],
     };
   },
   created() {
@@ -31,6 +32,8 @@ export default {
   },
   methods: {
     getMyAuctionItems() {
+      const accessToken = localStorage.getItem("accessToken");
+
       axios
         .get("http://localhost:8080/v1/my/auction-items?page=1&size=5", {
           proxy: {
@@ -39,8 +42,7 @@ export default {
             port: 8080,
           },
           headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTcxMzc5NzU2MywiaWF0IjoxNzEzNzk1NzYzfQ.duy_KPkRtgaoBqyr8j6n28Ihpzfvga2pz1HN3SiNoEY`,
-            //TODO : 토큰 로컬 스토리지 에서 가져오기 적용
+            Authorization: accessToken,
           },
         })
         .then((response) => {
@@ -49,16 +51,21 @@ export default {
         });
     },
     formattedBid(price) {
-      return price !== undefined ? price.toLocaleString() : '0';
+      return price !== undefined ? price.toLocaleString() : "0";
     },
     shortDescription(auctionItems) {
       return auctionItems.length > 150
         ? auctionItems.slice(0, 150) + "..."
         : auctionItems;
     },
-
-    updatePage() {
-      this.$router.push("/update-product");
+    updateProduct(auctionItemId) {
+      this.$router.push({
+        name: "update-product",
+        path: "/update-product",
+        params: {
+          id: auctionItemId,
+        },
+      });
     },
   },
 };

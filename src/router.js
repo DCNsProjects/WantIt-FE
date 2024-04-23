@@ -36,7 +36,8 @@ const routes = [
         component: MyAuctions
     },
     {
-        path: '/update-product',
+        name: 'update-product',
+        path: '/update-product/:id',
         component: UpdateProduct
     },
     {
