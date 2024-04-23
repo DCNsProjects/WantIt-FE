@@ -141,7 +141,6 @@ export default {
         const response = await axios.post("http://localhost:8080/v1/users/emails/authcode", {
           email: this.email
         });
-
         console.log('Email 인증 요청:', response);
         alert('이메일로 인증 코드가 전송되었습니다.');
       } catch (error) {
@@ -270,7 +269,29 @@ div {
 }
 
 .black-bg {
-  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.7); /* Black background with 70% opacity */
+  position: fixed; /* Fixed position */
+  z-index: 1000; /* Sit on top */
+  left: 0; /* Full width */
+  top: 0; /* Full height */
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  display: flex; /* Enable flex */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+.white-bg {
+  width: 20%;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  text-align: center;
+  position: fixed;
 }
 
 .mb-3.inputElement {
