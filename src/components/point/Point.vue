@@ -101,12 +101,12 @@
               font-weight: bold;
             "
           >
-            {{ 유저이름 }}
+            {{ item.nickName + "  (" + item.username + ")  "}} 
           </div>
           <div style="margin-left: 10px; margin-bottom: 5px">
-            포인트: {{ item.point }}
+            포인트: {{ formattedBid(item.point) }}
           </div>
-          <div style="margin-left: 10px">가용 포인트: {{ item.availablePoint }}</div>
+          <div style="margin-left: 10px">가용 포인트: {{ formattedBid(item.availablePoint) }}</div>
         </div>
       </div>
     </div>
@@ -210,7 +210,7 @@ export default {
           "http://localhost:8080/v1/points/withdrawal",
           {
             changedPoint: -this.point,
-            details: "충전",
+            details: "출금",
           },
           {
             headers: {
@@ -229,6 +229,9 @@ export default {
         console.error("출금 실패", error);
         alert("출금 요청에 실패했습니다. 다시 시도해주세요.");
       }
+    },
+    formattedBid(price) {
+      return price !== undefined ? price.toLocaleString() : '0';
     },
   },
   components: {},

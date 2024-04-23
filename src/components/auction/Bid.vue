@@ -101,7 +101,7 @@
     </div>
   </div>
 
-  <div class="black-bg" v-if="입찰하기 == true">
+  <!-- <div class="black-bg" v-if="비밀번호 == true">
     <div class="white-bg header-container">
       <button
         type="button"
@@ -131,6 +131,35 @@
         </div>
       </div>
     </div>
+  </div> -->
+
+  <div class="black-bg" v-if="입찰하기 == true">
+    <div class="white-bg">
+      <button
+        type="button"
+        class="btn-close top"
+        aria-label="Close"
+        @click="입찰하기 = false"
+      ></button>
+      <form class="d-grid gap-2 d-md-flex" role="search" style="height: 100px">
+        <input
+          class="form-control me-2"
+          type="search"
+          v-model="bid"
+          placeholder="입찰 금액"
+          aria-label="Search"
+          style="height: 70px; margin-top: 15px"
+        />
+        <button
+          class="btn btn-outline-secondary"
+          type="submit"
+          style="width: 100px; height: 70px; margin-top: 15px"
+          @click="createBid(auctionItemId)"
+        >
+          확인
+        </button>
+      </form>
+    </div>
   </div>
 
   <div class="container">
@@ -157,14 +186,10 @@
         <div class="date">경매 종료일: {{ item.endDate }}</div>
         <hr />
         <div class="d-grid gap-4 d-md-flex justify-content-md-end bid-btn">
-          <button
-            class="btn btn-secondary w-75"
-            type="button"
-            @click="입찰하기 = true"
-          >
+          <button class="btn btn-secondary w-75" type="button" @click="입찰하기 = true">
             입찰하기
           </button>
-          <button class="btn btn-secondary w-25" type="button">
+          <button class="btn btn-secondary w-25" type="button" @click="like(auctionItemId)">
             <i class="bi bi-bookmark-heart-fill"></i>
           </button>
         </div>
@@ -202,11 +227,13 @@ export default {
       호가정책: false,
       낙찰수수료: false,
       입찰하기: false,
+      bid: 0,
+      auctionItemId: undefined,
     };
   },
   methods: {
     formattedBid(price) {
-      return price !== undefined ? price.toLocaleString() : '0';
+      return price !== undefined ? price.toLocaleString() : "0";
     },
     async getAuctionItem(auctionItemId) {
       axios
@@ -223,10 +250,48 @@ export default {
           this.item = result.data;
         });
     },
+    async like(auctionItemId) {
+      await axios.post("http://localhost:8080/v1/auctions/" + auctionItemId + "/likes", {
+        proxy: {
+          protocol: "http",
+          host: "127.0.0.1",
+          port: 8080,
+        },
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+        },
+      });
+    },
+    async createBid(auctionItemId) {
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/v1/auction-items/" + auctionItemId + "/bids",
+          {
+            bidPrice: this.bid,
+          },
+          {
+            headers: {
+              Authorization: localStorage.getItem("accessToken"),
+            },
+            proxy: {
+              protocol: "http",
+              host: "127.0.0.1",
+              port: 8080,
+            },
+          }
+        );
+        console.log("입찰 성공", response);
+        alert("입찰 성공했습니다.");
+      } catch (error) {
+        console.error("입찰 실패", error);
+        alert("입찰 요청에 실패했습니다. 다시 시도해주세요.");
+      }
+    },
   },
   created() {
     console.log(this.$route.params.id);
     this.getAuctionItem(this.$route.params.id);
+    this.auctionItemId = this.$route.params.id
   },
 };
 </script>
