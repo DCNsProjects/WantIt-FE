@@ -57,6 +57,11 @@ export default {
         return
       }
       //로그인 API 호출
+      const existingToken = localStorage.getItem('accessToken');
+      if (existingToken) {
+        this.removeTokens();
+      }
+
       try {
         const response = await axios.post("http://localhost:8080/v1/users/login", {
           email: this.email,
@@ -85,14 +90,12 @@ export default {
       // 기존 토큰 삭제
       localStorage.removeItem('accessToken');
     },
+
     saveTokens(accessToken) {
       // 토큰 저장
-      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('accessToken', accessToken.trim());
     },
   },
-  mounted() {
-    this.removeTokens();
-  }
 }
 </script>
 
