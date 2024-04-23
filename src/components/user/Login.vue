@@ -15,11 +15,11 @@
           <label for="floatingPassword">비밀번호</label>
         </div>
         <div class="form-check text-start my-3">
-<!--          <input class="form-check-input" type="checkbox" value="remember-me"-->
-<!--                 id="flexCheckDefault">-->
-<!--          <label class="form-check-label" for="flexCheckDefault">-->
-<!--            자동 로그인-->
-<!--          </label>-->
+          <input class="form-check-input" type="checkbox" value="remember-me"
+                 id="flexCheckDefault">
+          <label class="form-check-label" for="flexCheckDefault">
+            자동 로그인
+          </label>
         </div>
         <div>
           <button type="submit" class="btn btn-primary w-100 py-2 sign-in-button" @click="fnLogin">
@@ -44,7 +44,8 @@ export default {
     }
   },
   methods: {
-    async fnLogin(event) {
+    fnLogin(event) {
+
       event.preventDefault();
 
       if (this.email === '') {
@@ -56,44 +57,39 @@ export default {
         alert('비밀번호를 입력하세요.')
         return
       }
-      //로그인 API 호출
-      const existingToken = localStorage.getItem('accessToken');
-      if (existingToken) {
-        this.removeTokens();
-      }
 
       try {
-        const response = await axios.post("http://localhost:8080/v1/users/login", {
-          email: this.email,
-          password: this.password,
+        this.logIn()
+      } catch (err) {
+        if (err.message.indexOf('Network Error') > -1) {
+          alert('서버에 접속할 수 없습니다. 상태를 확인해주세요.')
+        } else {
+          alert('로그인 정보를 확인할 수 없습니다.')
+        }
+      }
+    },
+    async logIn() {
+      try {
+        localStorage.removeItem('accessToken');
+        const response = await axios({
+          method: 'post',
+          url: 'http://localhost:8080/v1/users/login',
+          data: {
+            email: this.email,
+            password: this.password,
+          }
         });
-
-        const accessToken = response.data.data;
-        console.log('accessToken :', accessToken);
-
-        // 토큰 저장
-        this.saveTokens(accessToken);
-
+        let accessToken = response.data.data;
+        localStorage.setItem('accessToken', accessToken);
         this.$router.push('/');
-
       } catch (error) {
         if (error.response && error.response.data) {
           alert(error.response.data.message);
         } else {
           alert('로그인에 실패했습니다. 다시 시도해주세요.');
         }
-        this.removeTokens();
+        localStorage.removeItem('accessToken');
       }
-    },
-
-    removeTokens() {
-      // 기존 토큰 삭제
-      localStorage.removeItem('accessToken');
-    },
-
-    saveTokens(accessToken) {
-      // 토큰 저장
-      localStorage.setItem('accessToken', accessToken.trim());
     },
   },
 }

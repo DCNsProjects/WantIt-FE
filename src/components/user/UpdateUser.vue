@@ -15,22 +15,33 @@
     <div class="custom-form3">
       <div class="mb-3">
         <label for="formGroupExampleInput2" class="form-label">닉네임</label>
-        <br><label for="formGroupExampleInput2" class="form-label">현재 닉네임 : {{ currentNickname }} </label>
-        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="별명" v-model="nickname">
+        <br><label for="formGroupExampleInput2" class="form-label">현재 닉네임 : {{
+          currentNickname
+        }} </label>
+        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="별명"
+               v-model="nickname">
       </div>
       <div class="mb-3">
         <label for="formGroupExampleInput2" class="form-label">전화번호</label>
-        <br><label for="formGroupExampleInput2" class="form-label">현재 전화번호 : {{ currentPhoneNumber }}</label>
-        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="010-0000-0000" v-model="phoneNumber">
+        <br><label for="formGroupExampleInput2" class="form-label">현재 전화번호 : {{
+          currentPhoneNumber
+        }}</label>
+        <input type="text" class="form-control" id="formGroupExampleInput2"
+               placeholder="010-0000-0000" v-model="phoneNumber">
       </div>
       <div class="mb-3">
         <label for="formGroupExampleInput2" class="form-label">주소</label>
-        <br><label for="formGroupExampleInput2" class="form-label">현재 주소 : {{ currentAddress }} </label>
-        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="주소" v-model="address">
+        <br><label for="formGroupExampleInput2" class="form-label">현재 주소 : {{
+          currentAddress
+        }} </label>
+        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="주소"
+               v-model="address">
       </div>
       <div class="mb-3">
         <button type="button" class="btn btn-secondary btn-lg" @click="updateInfo">수정하기</button>
-        <br><button type="button" class="btn btn-secondary btn-lg" @click="updatePassword">비밀번호 수정하기</button>
+        <br>
+        <button type="button" class="btn btn-secondary btn-lg" @click="updatePassword">비밀번호 수정하기
+        </button>
       </div>
     </div>
   </div>
@@ -49,7 +60,7 @@ export default {
       address: '',
       currentNickname: '',
       currentPhoneNumber: '',
-      currentAddress : '',
+      currentAddress: '',
 
     }
   },
@@ -58,14 +69,11 @@ export default {
 
     async fetchUserInfo() {
       try {
-        const accessToken = localStorage.getItem('accessToken');
-        console.log('accessToken :', accessToken);
-
+        let accessToken = localStorage.getItem('accessToken');
         if (!accessToken) {
           alert('토큰이 없습니다. 로그인 후 다시 시도해주세요.');
           return;
         }
-
         const response = await axios({
           method: 'get',
           url: 'http://localhost:8080/v1/users',
@@ -83,10 +91,9 @@ export default {
       }
     },
 
-
-    async updateInfo(){
-      const accessToken = localStorage.getItem('accessToken');
-      console.log('accessToken :', accessToken);
+    async updateInfo() {
+      let accessToken = localStorage.getItem('accessToken');
+      accessToken = accessToken['data'];
 
       // 토큰이 없을 경우 처리
       if (!accessToken) {
@@ -95,7 +102,7 @@ export default {
       }
 
       try {
-        const response = await axios({
+        await axios({
           method: 'put',
           url: 'http://localhost:8080/v1/users',
           data: {
@@ -109,8 +116,7 @@ export default {
         });
         // 정보 수정 성공 시 모달 표시
         this.modalBox = true;
-        console.log('accessToken :', response.data.data);
-      }catch (error) {
+      } catch (error) {
         if (error.response && error.response.data) {
           alert(error.response.data.message);
         } else {
@@ -128,8 +134,7 @@ export default {
     },
   },
 
-  components: {
-  },
+  components: {},
 
   mounted() {
     this.fetchUserInfo();
