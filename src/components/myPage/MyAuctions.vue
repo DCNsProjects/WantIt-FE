@@ -20,10 +20,11 @@
 
 <script>
 import axios from "axios";
+
 export default {
   data() {
     return {
-      auctionItems:[],
+      auctionItems: [],
     };
   },
   created() {
@@ -31,6 +32,8 @@ export default {
   },
   methods: {
     getMyAuctionItems() {
+      const accessToken = localStorage.getItem("accessToken");
+
       axios
         .get("http://localhost:8080/v1/my/auction-items?page=1&size=5", {
           proxy: {
@@ -39,8 +42,7 @@ export default {
             port: 8080,
           },
           headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTcxMzc5NzU2MywiaWF0IjoxNzEzNzk1NzYzfQ.duy_KPkRtgaoBqyr8j6n28Ihpzfvga2pz1HN3SiNoEY`,
-            //TODO : 토큰 로컬 스토리지 에서 가져오기 적용
+            Authorization: accessToken,
           },
         })
         .then((response) => {
@@ -49,7 +51,7 @@ export default {
         });
     },
     formattedBid(price) {
-      return price !== undefined ? price.toLocaleString() : '0';
+      return price !== undefined ? price.toLocaleString() : "0";
     },
     shortDescription(auctionItems) {
       return auctionItems.length > 150
