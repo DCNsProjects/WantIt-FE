@@ -15,8 +15,8 @@
           <label for="floatingPassword">비밀번호</label>
         </div>
         <div class="form-check text-start my-3">
-          <input class="form-check-input" type="checkbox" value="remember-me"
-                 id="flexCheckDefault">
+<!--          <input class="form-check-input" type="checkbox" value="remember-me"-->
+<!--                 id="flexCheckDefault">-->
 <!--          <label class="form-check-label" for="flexCheckDefault">-->
 <!--            자동 로그인-->
 <!--          </label>-->
@@ -66,9 +66,6 @@ export default {
         const accessToken = response.data.data;
         console.log('accessToken :', accessToken);
 
-        // 기존 토큰 삭제
-        this.removeTokens();
-
         // 토큰 저장
         this.saveTokens(accessToken);
 
@@ -87,19 +84,15 @@ export default {
     removeTokens() {
       // 기존 토큰 삭제
       localStorage.removeItem('accessToken');
-      document.cookie = `accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
     },
     saveTokens(accessToken) {
       // 토큰 저장
-      document.cookie = `accessToken=${accessToken}; path=/;`
       localStorage.setItem('accessToken', accessToken);
-
-      // 자동 로그인 체크 시 쿠키 설정
-      if (this.rememberMe) {
-        document.cookie = `accessToken=${accessToken}; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
-      }
     },
   },
+  mounted() {
+    this.removeTokens();
+  }
 }
 </script>
 
