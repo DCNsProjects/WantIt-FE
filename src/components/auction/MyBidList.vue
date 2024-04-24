@@ -1,37 +1,56 @@
 <template>
-  <div class="black-bg" v-if="modalBox == true">
+  <div class="black-bg" v-if="TrueModalBox == true">
+    <div class="white-bg">
+      <h4></h4>
+      <p>선택한 경매 상품 찜하기가 되었습니다. </p><br>
+      <div class="button-right">
+        <button type="button" class="btn btn-secondary btn-sm" @click="TrueModalBox = false">닫기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="black-bg" v-if="FalseModalBox == true">
     <div class="white-bg">
       <h4></h4>
       <p>선택한 경매 상품 찜하기가 취소 되었습니다. </p><br>
       <div class="button-right">
-        <button type="button" class="btn btn-secondary btn-sm" @click="modalBox = false">닫기</button>
+        <button type="button" class="btn btn-secondary btn-sm" @click="FalseModalBox = false">닫기
+        </button>
       </div>
     </div>
   </div>
+
   <div>
     <div class="page_title">
-      <h2 class="page_title">내가 찜한 경매</h2>
-    </div>
-    <div class="items">
-      <h3 class="title"> 내가 찜한 경매 </h3>
+      <h2 class="page_title">내가 입찰한 경매상품 목록 조회</h2>
     </div>
     <div class="items" style="margin-bottom: 40px;">
+      <h3 class="title"> 내가 입찰한 경매상품 목록 </h3>
       <article class="auctionItem" v-for="(item, index) in itemList" :key="index">
         <figure class="thumbnail">
           <img
-              src="https://www.seoulauction.com/nas_img//front/main0892/7ce0281b-8928-4ff5-8857-dced87a87fa6.jpg"
+              src=""
               width="500" height="500">
         </figure>
         <div class="auction_info">
-          <h3 class="title">{{ item.itemName }}</h3>
+
           <div class="description">
             <dl>
-              <dt>경매 시작일</dt>
-              <dd>{{ item.startDate }}</dd>
+              <dt>상품명</dt>
+              <dd>{{ item.itemName }}</dd>
             </dl>
             <dl>
-              <dt>경매 마감일</dt>
-              <dd>{{ item.endDate }}</dd>
+              <dt>입찰가</dt>
+              <dd>{{ item.bidPrice.toLocaleString() }} 원</dd>
+            </dl>
+            <dl>
+              <dt>입찰하기 시작한 날짜</dt>
+              <dd>{{ new Date(item.createdAt).toISOString().substring(0, 10) }}</dd>
+            </dl>
+            <dl>
+              <dt>마지막 입찰 날짜</dt>
+              <dd>{{ new Date(item.updatedAt).toISOString().substring(0, 10) }}</dd>
             </dl>
             <button @click="goToBidPage(item.auctionItemId)">상세보기</button>
           </div>
@@ -53,9 +72,9 @@ export default {
   name: 'App',
   data() {
     return {
-      modalBox: false,
+      TrueModalBox: false,
+      FalseModalBox: false,
       itemList: [],
-
     }
   },
 
@@ -64,7 +83,7 @@ export default {
       this.$router.push(`/bids/${auctionItemId}`);
     },
 
-    async MyLikedAuctionItems() {
+    async MyBidList() {
       try {
         let accessToken = localStorage.getItem('accessToken');
         if (!accessToken) {
@@ -73,14 +92,13 @@ export default {
         }
         const response = await axios({
           method: 'get',
-          url: 'http://localhost:8080/v1/auction-items/likes',
-          params: {},
+          url: 'http://localhost:8080/v1/auction-items/bids',
           headers: {
-            'Authorization': accessToken // 헤더에 토큰 추가
+            'Authorization': accessToken
           }
         });
-        console.log('response.data.data :', response.data.data);
         this.itemList = response.data.data;
+        console.log('response.data.data :', response.data.data);
       } catch (error) {
         console.error('Error fetching user info:', error);
       }
@@ -94,15 +112,23 @@ export default {
       }
 
       try {
-        await axios({
+        const response = await axios({
           method: 'post',
           url: `http://localhost:8080/v1/auction-items/${auctionItemId}/likes`,
           headers: {
             'Authorization': accessToken
           }
         });
-        this.modalBox = true;
-        this.MyLikedAuctionItems();
+
+        console.log('like response :', response.data.data);
+        console.log('like  :', response.data.data.liked);
+
+        if (response.data.data.liked == true) {
+          this.TrueModalBox = true;
+        } else if (response.data.data.liked == false) {
+          this.FalseModalBox = true;
+        }
+
       } catch (error) {
         if (error.response && error.response.data) {
           alert(error.response.data.message);
@@ -113,7 +139,7 @@ export default {
     }
   },
   mounted() {
-    this.MyLikedAuctionItems();
+    this.MyBidList();
   },
 }
 </script>
@@ -125,16 +151,6 @@ body {
 
 div {
   box-sizing: border-box;
-}
-.page_title {
-  width: 100%;
-  max-width: 1320px;
-  color: rgb(17, 17, 17);
-  position: relative;
-  font-size: 24px;
-  font-weight: 500;
-  line-height: 30px;
-  margin: 30px 0 20px 150px; /* top right bottom left  */
 }
 
 .items {

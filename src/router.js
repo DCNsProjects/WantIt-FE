@@ -17,6 +17,7 @@ import UpdateUser from "./components/user/UpdateUser.vue"
 import UpdatePassword from "./components/user/UpdatePassword.vue"
 import ScheduledAuction from "./components/auction/ScheduledAuction.vue"
 import FinishedAuctionItemDetail from "./components/auction/FinishedAuctionItemDetail.vue"
+import MyBidList from "@/components/auction/MyBidList.vue";
 
 const routes = [
     {
@@ -91,6 +92,10 @@ const routes = [
     {
         path: '/scheduled-auction',
         component : ScheduledAuction
+    },
+    {
+        path: '/auction-items/bids',
+        component : MyBidList
     },
 ]
 
