@@ -2,10 +2,7 @@
   <div class="container">
     <div class="row" v-for="item in finishedItems" :key="item.id">
       <div class="items finishedAuctionItems" style="margin-bottom: 40px">
-        <div
-          class="finishedAuctionCard"
-          @click="detail(item.auctionItemId)"
-        >
+        <div class="finishedAuctionCard" @click="detail(item.auctionItemId)">
           <img
             src="https://www.seoulauction.com/nas_img/front/online0888/thum/d1aa1685-65ce-48cf-ae11-9a0d8f22f700.jpg"
             class="card-img-top"
@@ -18,6 +15,12 @@
       </div>
     </div>
   </div>
+
+  <div class="pagination">
+    <button @click="prevPage" :disabled="currentPage <= 1">&lt;</button>
+    <span>{{ currentPage }} / {{ totalPage }}</span>
+    <button @click="nextPage" :disabled="currentPage >= totalPage">&gt;</button>
+  </div>
 </template>
 
 <script>
@@ -28,6 +31,8 @@ export default {
   data() {
     return {
       finishedItems: [],
+      currentPage: 1,
+      totalPage: 1,
     };
   },
 
@@ -39,12 +44,11 @@ export default {
         params: {
           id: auctionItemId,
         },
-      
       });
     },
-    async getFinishedAuctionItems() {
+    async getFinishedAuctionItems(page = 1) {
       axios
-        .get("http://localhost:8080/v1/auction-items/finished?page=1&size=5", {
+        .get(`http://localhost:8080/v1/auction-items/finished?page=${page}&size=5`, {
           proxy: {
             protocol: "http",
             host: "127.0.0.1",
@@ -54,8 +58,20 @@ export default {
         .then((response) => {
           const result = response.data;
           this.finishedItems = result.data.responseDtoList;
+          this.currentPage = page;
+          this.totalPage = result.data.totalPage;
           console.log(this.finishedItems);
         });
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.getFinishedAuctionItems(this.currentPage - 1);
+      }
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPage) {
+        this.getFinishedAuctionItems(this.currentPage + 1);
+      }
     },
   },
   created() {
@@ -117,5 +133,30 @@ div {
 
 .container {
   margin-top: 90px;
+}
+
+.pagination {
+  background: transparent;
+  border: none;
+  font-size: 1.5em;
+  color: #333;
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  border: none;
+}
+li {
+  margin-right: 5px;
+}
+
+li button {
+  margin: 0;
+  padding: 0;
 }
 </style>

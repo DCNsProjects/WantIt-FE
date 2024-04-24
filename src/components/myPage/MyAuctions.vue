@@ -9,12 +9,22 @@
         <div class="info">
           <p class="bid">현재 입찰 금액: {{ formattedBid(item.minPrice) }}</p>
 
-          <button class="btn btn-primary" type="submit" @click="updateProduct(item.auctionItemId)">
+          <button
+            class="btn btn-primary"
+            type="submit"
+            @click="updateProduct(item.auctionItemId)"
+          >
             경매 수정
           </button>
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="pagination">
+    <button @click="prevPage" :disabled="currentPage <= 1">&lt;</button>
+    <span>{{ currentPage }} / {{ totalPage }}</span>
+    <button @click="nextPage" :disabled="currentPage >= totalPage">&gt;</button>
   </div>
 </template>
 
@@ -25,17 +35,19 @@ export default {
   data() {
     return {
       auctionItems: [],
+      currentPage: 1,
+      totalPage: 1,
     };
   },
   created() {
     this.getMyAuctionItems();
   },
   methods: {
-    getMyAuctionItems() {
+    getMyAuctionItems(page = 1) {
       const accessToken = localStorage.getItem("accessToken");
 
       axios
-        .get("http://localhost:8080/v1/my/auction-items?page=1&size=5", {
+        .get(`http://localhost:8080/v1/my/auction-items?page=${page}&size=5`, {
           proxy: {
             protocol: "http",
             host: "127.0.0.1",
@@ -48,6 +60,8 @@ export default {
         .then((response) => {
           const result = response.data;
           this.auctionItems = result.data.responseDtoList;
+          this.currentPage = page;
+          this.totalPage = result.data.totalPage;
         });
     },
     formattedBid(price) {
@@ -66,6 +80,16 @@ export default {
           id: auctionItemId,
         },
       });
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.getMyAuctionItems(this.currentPage - 1);
+      }
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPage) {
+        this.getMyAuctionItems(this.currentPage + 1);
+      }
     },
   },
 };
@@ -141,5 +165,29 @@ export default {
   display: flex;
   margin-top: auto;
   justify-content: space-between;
+}
+.pagination {
+  background: transparent;
+  border: none;
+  font-size: 1.5em;
+  color: #333;
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  border: none;
+}
+li {
+  margin-right: 5px;
+}
+
+li button {
+  margin: 0;
+  padding: 0;
 }
 </style>

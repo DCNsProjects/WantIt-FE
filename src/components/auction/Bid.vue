@@ -189,11 +189,7 @@
           <button class="btn btn-secondary w-75" type="button" @click="입찰하기 = true">
             입찰하기
           </button>
-          <button
-            class="btn btn-secondary w-25"
-            type="button"
-            @click="like()"
-          >
+          <button class="btn btn-secondary w-25" type="button" @click="like()">
             <i class="bi bi-bookmark-heart-fill"></i>
           </button>
         </div>
@@ -257,7 +253,7 @@ export default {
     },
     async getTopBid(auctionItemId) {
       axios
-        .get("http://localhost:8080/v1/auction-items/" + auctionItemId+"/bids/top", {
+        .get("http://localhost:8080/v1/auction-items/" + auctionItemId + "/bids/top", {
           proxy: {
             protocol: "http",
             host: "127.0.0.1",
@@ -272,16 +268,20 @@ export default {
     },
     async like() {
       console.log(localStorage.getItem("accessToken"));
-      await axios.post("http://localhost:8080/v1/auctions/" + this.auctionItemId + "/likes", null, {
-        headers: {
-          Authorization: localStorage.getItem("accessToken"),
-        },
-        proxy: {
-          protocol: "http",
-          host: "127.0.0.1",
-          port: 8080,
-        },
-      });
+      await axios.post(
+        "http://localhost:8080/v1/auction-items/" + this.auctionItemId + "/likes",
+        null,
+        {
+          headers: {
+            Authorization: localStorage.getItem("accessToken"),
+          },
+          proxy: {
+            protocol: "http",
+            host: "127.0.0.1",
+            port: 8080,
+          },
+        }
+      );
     },
     async createBid(auctionItemId) {
       try {
@@ -311,17 +311,18 @@ export default {
   },
   created() {
     // const EventSource = NativeEventSource || EventSourcePolyfill;
-    const url = "url : http://localhost:8080/v1/live-bids/auction-items/"+this.$route.params.id;
+    const url =
+      "url : http://localhost:8080/v1/live-bids/auction-items/" + this.$route.params.id;
     console.log(url);
 
     const eventSource = new EventSource(
-      "http://localhost:8080/v1/live-bids/auction-items/"+this.$route.params.id,
+      "http://localhost:8080/v1/live-bids/auction-items/" + this.$route.params.id
     );
 
-    eventSource.addEventListener("bidUpdate",(event)=>{
+    eventSource.addEventListener("bidUpdate", (event) => {
       const newPrice = JSON.parse(event.data).bidPrice;
       this.item.minPrice = newPrice;
-    })
+    });
     eventSource.onmessage = (event) => {
       this.item.minPrice = event.data.bidPrice;
     };
@@ -329,7 +330,7 @@ export default {
       console.error("error : ", error);
       eventSource.close();
     };
-    
+
     this.getAuctionItem(this.$route.params.id);
     this.getTopBid(this.$route.params.id);
     this.auctionItemId = this.$route.params.id;
