@@ -24,6 +24,12 @@
       </article>
     </div>
   </div>
+  <div class="pagination">
+    <button @click="prevPage" :disabled="currentPage <= 1"> &lt; </button>
+    <span>{{ currentPage }} / {{ totalPage }}</span>
+    <button @click="nextPage" :disabled="currentPage >= totalPage"> &gt; </button>
+  </div>
+
 </template>
 
 <script>
@@ -34,6 +40,8 @@ export default {
   data() {
     return {
       finishedItems: [],
+      currentPage: 1,
+      totalPage: 1,
     };
   },
 
@@ -43,9 +51,9 @@ export default {
       this.$router.push(`/auction-items/${auctionItemId}/finished`);
     },
 
-    async getFinishedAuctionItems() {
+    async getFinishedAuctionItems(page = 1) {
       axios
-      .get("http://localhost:8080/v1/auction-items/finished?page=1&size=5", {
+      .get(`http://localhost:8080/v1/auction-items/finished?page=${page}&size=5`, {
         proxy: {
           protocol: "http",
           host: "127.0.0.1",
@@ -55,8 +63,20 @@ export default {
       .then((response) => {
         const result = response.data;
         this.finishedItems = result.data.responseDtoList;
+        this.currentPage = page;
+        this.totalPage = result.data.totalPage;
         console.log(this.finishedItems);
       });
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.getFinishedAuctionItems(this.currentPage - 1);
+      }
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPage) {
+        this.getFinishedAuctionItems(this.currentPage + 1);
+      }
     },
   },
   created() {
@@ -169,7 +189,20 @@ li button {
   margin: 0;
   padding: 0;
 }
+.pagination {
+  background: transparent;
+  border: none;
+  font-size: 1.5em;
+  color: #333;
+  border-radius: 50%;
 
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+.pagination button {
+  border: none;
+}
 </style>
 
