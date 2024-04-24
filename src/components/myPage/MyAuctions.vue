@@ -8,7 +8,7 @@
         <p class="des">{{ shortDescription(item.itemDescription) }}</p>
         <div class="info">
           <p class="bid">현재 입찰 금액: {{ formattedBid(item.minPrice) }}</p>
-
+        </div>
           <button
             class="btn btn-primary"
             type="submit"
@@ -16,7 +16,6 @@
           >
             경매 수정
           </button>
-        </div>
       </div>
     </div>
   </div>
