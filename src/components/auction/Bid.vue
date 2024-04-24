@@ -294,7 +294,26 @@ export default {
     },
   },
   created() {
-    console.log(this.$route.params.id);
+    // const EventSource = NativeEventSource || EventSourcePolyfill;
+    const url = "url : http://localhost:8080/v1/live-bids/auction-items/"+this.$route.params.id;
+    console.log(url);
+
+    const eventSource = new EventSource(
+      "http://localhost:8080/v1/live-bids/auction-items/"+this.$route.params.id,
+    );
+
+    eventSource.addEventListener("bidUpdate",(event)=>{
+      const newPrice = JSON.parse(event.data).bidPrice;
+      this.item.minPrice = newPrice;
+    })
+    eventSource.onmessage = (event) => {
+      this.item.minPrice = event.data.bidPrice;
+    };
+    eventSource.onerror = (error) => {
+      console.error("error : ", error);
+      eventSource.close();
+    };
+    
     this.getAuctionItem(this.$route.params.id);
     this.auctionItemId = this.$route.params.id;
   },
