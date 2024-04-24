@@ -7,8 +7,7 @@
       <p class="lead">
         ❗ 본 페이지에서 경매품을 등록할 수 있습니다. ❗<br />
         ❗ 판매 금지 품목은 경고 없이 삭제될 수 있습니다. ❗<br />
-        ❗ 경매 시작일은 현재 날짜로부터 최소 1일 이후부터 설정 가능합니다.
-        ❗<br />
+        ❗ 경매 시작일은 현재 날짜로부터 최소 1일 이후부터 설정 가능합니다. ❗<br />
         ❗ 경매 종료는 시작당일 오후 7시에 자동으로 종료됩니다. ❗<br />
       </p>
     </div>
@@ -34,6 +33,24 @@
           name="productDescription"
           v-model="itemDescription"
         ></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label for="productDescription" class="form-label">카테고리</label>
+        <div class="filter-bar">
+          <select class="form-select" id="country" required="" @change="changeCategory">
+            <option value="">선택</option>
+            <option value="SHOES">신발</option>
+            <option value="WATCH">시계</option>
+            <option value="LIMITED_EDITION">리미티드 에디션</option>
+            <option value="COLLABORATION">콜라보레이션</option>
+            <option value="FIGURE">피규어</option>
+            <option value="JEWELRY">쥬얼리</option>
+            <option value="ART">예술품</option>
+            <option value="ANTIQUE">엔티크</option>
+            <option value="ETC">기타</option>
+          </select>
+        </div>
       </div>
 
       <div class="mb-3">
@@ -72,18 +89,9 @@
       </div>
       <div class="mb-3">
         <label for="productImage" class="form-label">이미지 등록</label>
-        <input
-          type="file"
-          class="form-control"
-          id="productImage"
-          name="productImage"
-        />
+        <input type="file" class="form-control" id="productImage" name="productImage" />
       </div>
-      <button
-        type="submit"
-        class="btn btn-primary"
-        @click.prevent="createProduct"
-      >
+      <button type="submit" class="btn btn-primary" @click.prevent="createProduct">
         등 록 하 기
       </button>
     </form>
@@ -103,6 +111,7 @@ export default {
       minPrice: undefined,
       startDate: undefined,
       endDate: undefined,
+      category: "",
     };
   },
   methods: {
@@ -133,6 +142,7 @@ export default {
             itemName: this.itemName,
             itemDescription: this.itemDescription,
             minPrice: this.minPrice,
+            category: this.category,
             startDate: this.convertToDate(this.startDate),
             endDate: this.convertToDate(this.endDate),
           },
@@ -153,6 +163,38 @@ export default {
         alert("상품 등록에 실패하엿습니다. 다시 시도해주세요.");
       }
     },
+    async changeCategory(event) {
+      const selectFilter = event.target.value;
+      switch (selectFilter) {
+        case "SHOES":
+          this.category = "SHOSE";
+          break;
+        case "WATCH":
+          this.category = "WATCH";
+          break;
+        case "LIMITED_EDITION":
+          this.category = "LIMITED_EDITION";
+          break;
+        case "COLLABORATION":
+          this.category = "COLLABORATION";
+          break;
+        case "FIGURE":
+          this.category = "FIGURE";
+          break;
+        case "JEWELRY":
+          this.category = "JEWELRY";
+          break;
+        case "ART":
+          this.category = "ART";
+          break;
+        case "ANTIQUE":
+          this.category = "ANTIQUE";
+          break;
+        case "ETC":
+          this.category = "ETC";
+          break;
+      }
+    },
   },
 };
 </script>
@@ -161,9 +203,13 @@ export default {
 @font-face {
   font-family: "nngt";
   src: url("../../assets/fonts/NanumGothic.ttf") format("truetype");
+  font-family: "nngt";
+  src: url("../../assets/fonts/NanumGothic.ttf") format("truetype");
 }
 
 @font-face {
+  font-family: "jua";
+  src: url("../../assets/fonts/BMJUA_ttf.ttf") format("truetype");
   font-family: "jua";
   src: url("../../assets/fonts/BMJUA_ttf.ttf") format("truetype");
 }
@@ -171,9 +217,13 @@ export default {
 * {
   font-family: "nngt";
   font-size: 20px;
+  font-family: "nngt";
+  font-size: 20px;
 }
 
 .addProduct {
+  width: 40%;
+  margin: 0 auto;
   width: 40%;
   margin: 0 auto;
 }
@@ -181,9 +231,16 @@ export default {
 .form-control {
   border-radius: 15px;
   border-color: #ccc0f6;
+  border-radius: 15px;
+  border-color: #ccc0f6;
 }
 
 .form-label {
+  font-size: 20px;
+  font-weight: bold;
+  color: #000;
+  margin-top: 10px;
+  margin-bottom: 3px;
   font-size: 20px;
   font-weight: bold;
   color: #000;
@@ -205,9 +262,26 @@ export default {
   display: block;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 40px;
+  border-radius: 20px;
+  border: none;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  width: 200px;
+  height: 50px;
+  color: rgb(0, 0, 0);
+  font-size: larger;
+  font-family: jua;
+  background-color: #ccc0f6;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .maintext {
+  font-size: 50px;
+  font-weight: bold;
+  color: #ccc0f6;
+  font-family: jua;
   font-size: 50px;
   font-weight: bold;
   color: #ccc0f6;
@@ -217,9 +291,13 @@ export default {
 .main {
   margin-top: 110px;
   background-color: #eeebfa !important;
+  margin-top: 110px;
+  background-color: #eeebfa !important;
 }
 
 .bi {
+  font-size: 100px;
+  color: #6342d8;
   font-size: 100px;
   color: #6342d8;
 }

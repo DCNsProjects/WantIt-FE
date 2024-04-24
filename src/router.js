@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Categories from './components/home/Categories.vue'
-import Top3Items from './components/home/Top3Items.vue'
 import AddProduct from './components/myPage/AddProduct.vue'
 import MyAuctions from './components/myPage/MyAuctions.vue'
 import UpdateProduct from './components/myPage/UpdateProduct.vue'
@@ -18,13 +16,15 @@ import UpdatePassword from "./components/user/UpdatePassword.vue"
 import ScheduledAuction from "./components/auction/ScheduledAuction.vue"
 import FinishedAuctionItemDetail from "./components/auction/FinishedAuctionItemDetail.vue"
 import MyBidList from "@/components/auction/MyBidList.vue";
+import InProgressAuctionCategory from "./components/auction/InProgressAuctionCategory.vue"
+import HomePage from './components/home/HomePage.vue'
+
 
 const routes = [
     {
         path: '/',
         components: {
-            default: Categories,
-            top: Top3Items
+            default: HomePage
         }
     },
     {
@@ -53,6 +53,11 @@ const routes = [
         name: 'inProgress',
         path: '/in-progress',
         component : InProgress
+    },
+    {
+        name: 'category',
+        path: '/category/:id',
+        component : InProgressAuctionCategory
     },
     {
         name: 'bids',
