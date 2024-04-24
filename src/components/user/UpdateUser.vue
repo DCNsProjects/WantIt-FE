@@ -71,7 +71,7 @@ export default {
       try {
         let accessToken = localStorage.getItem('accessToken');
         if (!accessToken) {
-          alert('토큰이 없습니다. 로그인 후 다시 시도해주세요.');
+          alert('로그인 후 다시 시도해주세요.');
           return;
         }
         const response = await axios({
@@ -97,7 +97,7 @@ export default {
 
       // 토큰이 없을 경우 처리
       if (!accessToken) {
-        alert('토큰이 없습니다. 로그인 후 다시 시도해주세요.');
+        alert('로그인 후 다시 시도해주세요.');
         return;
       }
 
