@@ -35,11 +35,12 @@
               My Page
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" @click="myAuctions">나의 경매품</a></li>
-              <li><a class="dropdown-item" @click="addProductPage">경매품 등록</a></li>
-              <li><a class="dropdown-item">낙찰 내역</a></li>
-              <li><a class="dropdown-item" @click="likedAuction">관심 경매</a></li>
               <li><a class="dropdown-item" @click="updateUser">내 정보</a></li>
+              <li><a class="dropdown-item" @click="likedAuction">나의 관심 경매</a></li>
+              <li><a class="dropdown-item" @click="addProductPage">경매품 등록</a></li>
+              <li><a class="dropdown-item" @click="myAuctions">내가 등록한 경매품</a></li>
+              <li><a class="dropdown-item" @click="mybidList">내가 입찰한 경매품</a></li>
+              <li><a class="dropdown-item">낙찰 내역</a></li>
             </ul>
           </li>
         </ul>
@@ -146,6 +147,9 @@ export default {
 
     scheduledAuction() {
       this.$router.push('/scheduled-auction');
+    },
+    mybidList() {
+      this.$router.push('/auction-items/bids');
     }
   },
   watch: {
