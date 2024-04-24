@@ -18,6 +18,7 @@ import UpdatePassword from "./components/user/UpdatePassword.vue"
 import ScheduledAuction from "./components/auction/ScheduledAuction.vue"
 import FinishedAuctionItemDetail from "./components/auction/FinishedAuctionItemDetail.vue"
 import MyBidList from "@/components/auction/MyBidList.vue";
+import MyFinishedAuction from "@/components/auction/MyFinishedAuction.vue";
 
 const routes = [
     {
@@ -96,6 +97,10 @@ const routes = [
     {
         path: '/auction-items/bids',
         component : MyBidList
+    },
+    {
+        path: '/auction-items/finished',
+        component : MyFinishedAuction
     },
 ]
 

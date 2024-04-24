@@ -23,14 +23,14 @@
 
   <div>
     <div class="page_title">
-      <h2 class="page_title">내가 입찰한 경매상품 목록 조회</h2>
+      <h2 class="page_title">입찰 내역</h2>
     </div>
     <div class="items" style="margin-bottom: 40px;">
-      <h3 class="title"> 내가 입찰한 경매상품 목록 </h3>
+      <h3 class="title"> 입찰 내역 </h3>
       <article class="auctionItem" v-for="(item, index) in itemList" :key="index">
         <figure class="thumbnail">
           <img
-              src=""
+              src="https://www.seoulauction.com/nas_img/front/online0888/thum/d1aa1685-65ce-48cf-ae11-9a0d8f22f700.jpg"
               width="500" height="500">
         </figure>
         <div class="auction_info">
