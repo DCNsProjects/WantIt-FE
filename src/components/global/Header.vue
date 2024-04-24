@@ -38,9 +38,9 @@
               <li><a class="dropdown-item" @click="updateUser">내 정보</a></li>
               <li><a class="dropdown-item" @click="likedAuction">나의 관심 경매</a></li>
               <li><a class="dropdown-item" @click="addProductPage">경매품 등록</a></li>
-              <li><a class="dropdown-item" @click="myAuctions">내가 등록한 경매품</a></li>
-              <li><a class="dropdown-item" @click="mybidList">내가 입찰한 경매품</a></li>
-              <li><a class="dropdown-item">낙찰 내역</a></li>
+              <li><a class="dropdown-item" @click="myAuctions">등록한 경매품 조회</a></li>
+              <li><a class="dropdown-item" @click="mybidList">입찰 내역</a></li>
+              <li><a class="dropdown-item" @click="myAuctionItemFinished">낙찰 내역</a></li>
             </ul>
           </li>
         </ul>
@@ -150,7 +150,10 @@ export default {
     },
     mybidList() {
       this.$router.push('/auction-items/bids');
-    }
+    },
+    myAuctionItemFinished() {
+      this.$router.push('/auction-items/finished');
+    },
   },
   watch: {
     // localStorage의 변경을 감지하여 isLoggedIn 업데이트

@@ -23,14 +23,14 @@
 
   <div>
     <div class="page_title">
-      <h2 class="page_title">내가 입찰한 경매상품 목록 조회</h2>
+      <h2 class="page_title">입찰 내역</h2>
     </div>
     <div class="items" style="margin-bottom: 40px;">
-      <h3 class="title"> 내가 입찰한 경매상품 목록 </h3>
+      <h3 class="title"> 입찰 내역 </h3>
       <article class="auctionItem" v-for="(item, index) in itemList" :key="index">
         <figure class="thumbnail">
           <img
-              src=""
+              src="https://www.seoulauction.com/nas_img/front/online0888/thum/d1aa1685-65ce-48cf-ae11-9a0d8f22f700.jpg"
               width="500" height="500">
         </figure>
         <div class="auction_info">
@@ -42,15 +42,15 @@
             </dl>
             <dl>
               <dt>입찰가</dt>
-              <dd>{{ item.bidPrice.toLocaleString() }} 원</dd>
+              <dd>{{ formatPrice(item.bidPrice) }}  원</dd>
             </dl>
             <dl>
               <dt>입찰하기 시작한 날짜</dt>
-              <dd>{{ new Date(item.createdAt).toISOString().substring(0, 10) }}</dd>
+              <dd> {{ formatDate(item.createdAt) }}</dd>
             </dl>
             <dl>
               <dt>마지막 입찰 날짜</dt>
-              <dd>{{ new Date(item.updatedAt).toISOString().substring(0, 10) }}</dd>
+              <dd> {{ formatDate(item.updatedAt) }}</dd>
             </dl>
             <button @click="goToBidPage(item.auctionItemId)">상세보기</button>
           </div>
@@ -79,15 +79,28 @@ export default {
   },
 
   methods: {
+
+    formatPrice(price) {
+      return price.toLocaleString();
+    },
+
+    formatDate(date) {
+      const formattedDate = new Date(date);
+      return formattedDate.toISOString().split('T')[0];
+    },
+
     goToBidPage(auctionItemId) {
       this.$router.push(`/bids/${auctionItemId}`);
     },
-
+    goToLoginPage() {
+      this.$router.push('/login');
+    },
     async MyBidList() {
       try {
         let accessToken = localStorage.getItem('accessToken');
         if (!accessToken) {
           alert('로그인 후 다시 시도해주세요.');
+          this.goToLoginPage();
           return;
         }
         const response = await axios({
@@ -108,6 +121,7 @@ export default {
       let accessToken = localStorage.getItem('accessToken');
       if (!accessToken) {
         alert('로그인 후 다시 시도해주세요.');
+        this.goToLoginPage();
         return;
       }
 

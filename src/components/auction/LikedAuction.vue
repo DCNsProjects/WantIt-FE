@@ -63,12 +63,15 @@ export default {
     goToBidPage(auctionItemId) {
       this.$router.push(`/bids/${auctionItemId}`);
     },
-
+    goToLoginPage() {
+      this.$router.push('/login');
+    },
     async MyLikedAuctionItems() {
       try {
         let accessToken = localStorage.getItem('accessToken');
         if (!accessToken) {
           alert('로그인 후 다시 시도해주세요.');
+          this.goToLoginPage();
           return;
         }
         const response = await axios({
@@ -90,6 +93,7 @@ export default {
       let accessToken = localStorage.getItem('accessToken');
       if (!accessToken) {
         alert('로그인 후 다시 시도해주세요.');
+        this.goToLoginPage();
         return;
       }
 
