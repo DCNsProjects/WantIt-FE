@@ -6,7 +6,7 @@
           <div class="card">
             <div class="card-body">
               <a href="#" class="card-img">
-                <img src="../../assets/images/shoe.jpg" class="img-fluid"/>
+                <img src="../../assets/images/shoe.jpg" class="img-fluid" @click="category(SHOES)"/>
               </a>
             </div>
           </div>
@@ -16,7 +16,7 @@
           <div class="card">
             <div class="card-body">
               <a href="#" class="card-img">
-                <img src="../../assets/images/watch.jpg" class="img-fluid"/>
+                <img src="../../assets/images/watch.jpg" class="img-fluid" @click="category(WATCH)"/>
               </a>
             </div>
           </div>
@@ -26,7 +26,7 @@
           <div class="card">
             <div class="card-body">
               <a href="#" class="card-img">
-                <img src="../../assets/images/limited.jpg" class="img-fluid"/>
+                <img src="../../assets/images/limited.jpg" class="img-fluid" @click="category(LIMITED_EDITION)"/>
               </a>
             </div>
           </div>
@@ -36,7 +36,7 @@
           <div class="card">
             <div class="card-body">
               <a href="#" class="card-img">
-                <img src="../../assets/images/collab.jpg" class="img-fluid"/>
+                <img src="../../assets/images/collab.jpg" class="img-fluid" @click="category(COLLABORATION)"/>
               </a>
             </div>
           </div>
@@ -50,6 +50,7 @@
                     src="../../assets/images/figure.jpg"
                     class="img-fluid"
                     style="margin-top: 30px"
+                    @click="category(FIGURE)"
                 />
               </a>
             </div>
@@ -60,7 +61,7 @@
           <div class="card">
             <div class="card-body">
               <a href="#" class="card-img">
-                <img src="../../assets/images/jewel.jpg" class="img-fluid"/>
+                <img src="../../assets/images/jewel.jpg" class="img-fluid" @click="category(JEWELRY)"/>
               </a>
             </div>
           </div>
@@ -71,7 +72,7 @@
           <div class="card">
             <div class="card-body">
               <a href="#" class="card-img">
-                <img src="../../assets/images/picture.jpg" class="img-fluid"/>
+                <img src="../../assets/images/picture.jpg" class="img-fluid" @click="category(ART)"/>
               </a>
             </div>
           </div>
@@ -81,7 +82,7 @@
           <div class="card">
             <div class="card-body">
               <a href="#" class="card-img">
-                <img src="../../assets/images/entique.jpg" class="img-fluid"/>
+                <img src="../../assets/images/entique.jpg" class="img-fluid" @click="category(ANTIQUE)"/>
               </a>
             </div>
           </div>
@@ -115,8 +116,14 @@ export default {
   name: "MainCategories",
   data() {
     return {
-      todos: [],
-      todosCount: null,
+      SHOES: "SHOES",
+      WATCH: "WATCH",
+      LIMITED_EDITION: "LIMITED_EDITION",
+      COLLABORATION: "COLLABORATION",
+      FIGURE: "FIGURE",
+      JEWELRY: "JEWELRY",
+      ART: "ART",
+      ANTIQUE: "ANTIQUE",  
     };
   },
   methods: {
@@ -156,6 +163,15 @@ export default {
     //   //   event~~~~
     //   // };
     // },
+    category(category){
+      this.$router.push({
+        name:"category",
+        path:"/category",
+        params:{
+          id: category,
+        },
+      })
+    }
   },
   // created() {
   //   this.initializeAuthentication()
