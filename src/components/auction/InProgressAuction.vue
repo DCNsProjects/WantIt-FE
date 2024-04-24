@@ -32,6 +32,12 @@
       </div>
     </div>
   </div>
+
+  <div class="pagination">
+    <button @click="prevPage" :disabled="currentPage <= 1">&lt;</button>
+    <span>{{ currentPage }} / {{ totalPage }}</span>
+    <button @click="nextPage" :disabled="currentPage >= totalPage">&gt;</button>
+  </div>
 </template>
 
 <script>
@@ -43,6 +49,8 @@ export default {
     return {
       items: [],
       currentBidPrice: 1000000,
+      currentPage: 1,
+      totalPage: 1,
     };
   },
   methods: {
@@ -56,26 +64,35 @@ export default {
       });
     },
     formattedBid(price) {
-      return price !== undefined ? price.toLocaleString() : '0';
+      return price !== undefined ? price.toLocaleString() : "0";
     },
-    async getAuctionItemList() {
+    async getAuctionItemList(page = 1) {
       axios
-        .get(
-          "http://localhost:8080/v1/auction-items/in-progress?page=1&size=5",
-          {
-            proxy: {
-              protocol: "http",
-              host: "127.0.0.1",
-              port: 8080,
-            },
-          }
-        )
+        .get(`http://localhost:8080/v1/auction-items/in-progress?page=${page}&size=5`, {
+          proxy: {
+            protocol: "http",
+            host: "127.0.0.1",
+            port: 8080,
+          },
+        })
         .then((response) => {
           const result = response.data;
           console.log(result);
           const items = result.data.responseDtoList;
           this.items = items;
+          this.currentPage = page;
+          this.totalPage = result.data.totalPage;
         });
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.getAuctionItemList(this.currentPage - 1);
+      }
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPage) {
+        this.getAuctionItemList(this.currentPage + 1);
+      }
     },
   },
   created() {
@@ -136,5 +153,29 @@ export default {
   border: none;
   color: black;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+.pagination {
+  background: transparent;
+  border: none;
+  font-size: 1.5em;
+  color: #333;
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  border: none;
+}
+li {
+  margin-right: 5px;
+}
+
+li button {
+  margin: 0;
+  padding: 0;
 }
 </style>
