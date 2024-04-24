@@ -66,12 +66,15 @@ export default {
   },
 
   methods: {
-
+    goToLoginPage() {
+      this.$router.push('/login');
+    },
     async fetchUserInfo() {
       try {
         let accessToken = localStorage.getItem('accessToken');
         if (!accessToken) {
           alert('로그인 후 다시 시도해주세요.');
+          this.goToLoginPage();
           return;
         }
         const response = await axios({
@@ -81,7 +84,6 @@ export default {
             'Authorization': accessToken // 헤더에 토큰 추가
           }
         });
-
         const userData = response.data.data;
         this.currentNickname = userData.nickname;
         this.currentPhoneNumber = userData.phoneNumber;
@@ -90,17 +92,14 @@ export default {
         console.error('Error fetching user info:', error);
       }
     },
-
     async updateInfo() {
       let accessToken = localStorage.getItem('accessToken');
       accessToken = accessToken['data'];
-
-      // 토큰이 없을 경우 처리
       if (!accessToken) {
         alert('로그인 후 다시 시도해주세요.');
+        this.goToLoginPage();
         return;
       }
-
       try {
         await axios({
           method: 'put',
