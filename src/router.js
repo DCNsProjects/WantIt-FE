@@ -19,6 +19,8 @@ import ScheduledAuction from "./components/auction/ScheduledAuction.vue"
 import FinishedAuctionItemDetail from "./components/auction/FinishedAuctionItemDetail.vue"
 import MyBidList from "@/components/auction/MyBidList.vue";
 import MyFinishedAuction from "@/components/auction/MyFinishedAuction.vue";
+import MyFinishedAuctionItemDetail
+    from "@/components/auction/MyFinishedAuctionItemDetail.vue";
 
 const routes = [
     {
@@ -102,6 +104,11 @@ const routes = [
         path: '/auction-items/finished',
         component : MyFinishedAuction
     },
+    {
+        path: '/auction-items/:id/finished',
+        component : MyFinishedAuctionItemDetail
+    },
+
 ]
 
 export const router = createRouter({

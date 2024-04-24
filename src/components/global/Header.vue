@@ -153,7 +153,7 @@ export default {
     },
     myAuctionItemFinished() {
       this.$router.push('/auction-items/finished');
-    }
+    },
   },
   watch: {
     // localStorage의 변경을 감지하여 isLoggedIn 업데이트

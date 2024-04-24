@@ -42,15 +42,15 @@
             </dl>
             <dl>
               <dt>입찰가</dt>
-              <dd>{{ item.bidPrice.toLocaleString() }} 원</dd>
+              <dd>{{ formatPrice(item.bidPrice) }}  원</dd>
             </dl>
             <dl>
               <dt>입찰하기 시작한 날짜</dt>
-              <dd>{{ new Date(item.createdAt).toISOString().substring(0, 10) }}</dd>
+              <dd> {{ formatDate(item.createdAt) }}</dd>
             </dl>
             <dl>
               <dt>마지막 입찰 날짜</dt>
-              <dd>{{ new Date(item.updatedAt).toISOString().substring(0, 10) }}</dd>
+              <dd> {{ formatDate(item.updatedAt) }}</dd>
             </dl>
             <button @click="goToBidPage(item.auctionItemId)">상세보기</button>
           </div>
@@ -79,6 +79,16 @@ export default {
   },
 
   methods: {
+
+    formatPrice(price) {
+      return price.toLocaleString();
+    },
+
+    formatDate(date) {
+      const formattedDate = new Date(date);
+      return formattedDate.toISOString().split('T')[0];
+    },
+
     goToBidPage(auctionItemId) {
       this.$router.push(`/bids/${auctionItemId}`);
     },
