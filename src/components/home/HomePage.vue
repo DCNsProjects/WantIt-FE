@@ -41,7 +41,7 @@
         <div class="container">
           <div class="carousel-caption text-start">
             <h1>실시간 입찰 수 1위</h1>
-            <p class="opacity-75">{{ items[0].itemName }}</p>
+            <p class="opacity-75" v-if = "items.length > 2">{{items[0].itemName}}</p>
             <p>
               <a
                 class="btn btn-lg btn-primary"
@@ -68,7 +68,7 @@
         <div class="container">
           <div class="carousel-caption">
             <h1>실시간 입찰 수 2위</h1>
-            <p>{{ items[1].itemName }}</p>
+            <p class="opacity-75" v-if = "items.length > 2">{{items[1].itemName}}</p>
             <p>
               <a
                 class="btn btn-lg btn-primary"
@@ -95,7 +95,7 @@
         <div class="container">
           <div class="carousel-caption text-end">
             <h1>실시간 입찰 수 3위</h1>
-            <p>{{ items[2].itemName }}</p>
+            <p class="opacity-75" v-if = "items.length > 2">{{items[2].itemName}}</p>
             <p>
               <a
                 class="btn btn-lg btn-primary"
@@ -248,9 +248,6 @@
         </div>
       </div>
     </div>
-  </div>
-  <div>
-    <top3Items />
   </div>
 </template>
 
