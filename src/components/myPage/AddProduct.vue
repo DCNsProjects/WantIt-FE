@@ -7,7 +7,8 @@
       <p class="lead">
         ❗ 본 페이지에서 경매품을 등록할 수 있습니다. ❗<br />
         ❗ 판매 금지 품목은 경고 없이 삭제될 수 있습니다. ❗<br />
-        ❗ 경매 시작일은 현재 날짜로부터 최소 1일 이후부터 설정 가능합니다. ❗<br />
+        ❗ 경매 시작일은 현재 날짜로부터 최소 1일 이후부터 설정 가능합니다.
+        ❗<br />
         ❗ 경매 종료는 시작당일 오후 7시에 자동으로 종료됩니다. ❗<br />
       </p>
     </div>
@@ -38,7 +39,12 @@
       <div class="mb-3">
         <label for="productDescription" class="form-label">카테고리</label>
         <div class="filter-bar">
-          <select class="form-select" id="country" required="" @change="changeCategory">
+          <select
+            class="form-select"
+            id="country"
+            required=""
+            @change="changeCategory"
+          >
             <option value="">선택</option>
             <option value="SHOES">신발</option>
             <option value="WATCH">시계</option>
@@ -89,9 +95,20 @@
       </div>
       <div class="mb-3">
         <label for="productImage" class="form-label">이미지 등록</label>
-        <input type="file" class="form-control" id="productImage" name="productImage" />
+        <input
+          @change="imageUpload()"
+          ref="images"
+          type="file"
+          class="form-control"
+          id="productImage"
+          name="productImage"
+        />
       </div>
-      <button type="submit" class="btn btn-primary" @click.prevent="createProduct">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        @click.prevent="createProductWithImage"
+      >
         등 록 하 기
       </button>
     </form>
@@ -112,9 +129,14 @@ export default {
       startDate: undefined,
       endDate: undefined,
       category: "",
+      imageFile: "",
     };
   },
   methods: {
+    imageUpload(){
+      this.imageFile = this.$refs.images.files[0];
+      console.log(this.imageFile);
+    },
     getToday() {
       let today = new Date();
       let dd = String(today.getDate() + 1).padStart(2, "0");
@@ -133,6 +155,31 @@ export default {
       date.setHours(0, 0, 0, 0);
 
       return date;
+    },
+    async createProductWithImage(){
+      const formData = new FormData();
+      formData.append("file", this.imageFile);
+      formData.append("requestBody", JSON.stringify({
+        itemName: this.itemName,
+        itemDescription: this.itemDescription,
+        minPrice: this.minPrice,
+        category: this.category,
+        startDate: this.convertToDate(this.startDate),
+        endDate: this.convertToDate(this.endDate),
+      }));
+      const response = await axios.post("https://api.dcns-wantit.shop/v1/my/auction-items", formData, {
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+          "Content-Type": "multipart/form-data",
+        },
+        proxy: {
+              protocol: "http",
+              host: "127.0.0.1",
+              port: 8080,
+            },
+      });
+
+      console.log(response);
     },
     async createProduct() {
       try {
@@ -167,7 +214,7 @@ export default {
       const selectFilter = event.target.value;
       switch (selectFilter) {
         case "SHOES":
-          this.category = "SHOSE";
+          this.category = "SHOES";
           break;
         case "WATCH":
           this.category = "WATCH";
