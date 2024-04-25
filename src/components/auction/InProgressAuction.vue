@@ -8,10 +8,10 @@
               {{ item.itemName }}
             </h4>
             <div style="margin-left: -10%">
-              현재 입찰가 {{ formattedBid(item.minPrice) }}원
+              경매 시작가 : {{ formattedBid(item.minPrice) }} 원
             </div>
             <div style="margin-left: -10%; margin-top: 10px">
-              경매 마감일 {{ item.endDate }}
+              경매 마감일 : {{ converDate(item.endDate) }} 19:00 까지
             </div>
             <button
               type="button"
@@ -65,6 +65,10 @@ export default {
     },
     formattedBid(price) {
       return price !== undefined ? price.toLocaleString() : "0";
+    },
+    converDate(date) {
+      let parts = date.split("T");
+      return parts[0];
     },
     async getAuctionItemList(page = 1) {
       axios
