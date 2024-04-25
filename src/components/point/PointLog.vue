@@ -60,7 +60,7 @@ export default {
         alert("로그인 후 다시 시도해주세요.");
       }
       axios
-        .get(`http://localhost:8080/v1/points/log?page=${page}&size=10`, {
+        .get(`https://api.dcns-wantit.shop/v1/points/log?page=${page}&size=10`, {
           proxy: {
             protocol: "http",
             host: "127.0.0.1",
@@ -87,16 +87,16 @@ export default {
       let apiUrl = "";
       switch (selectFilter) {
         case "charge":
-          apiUrl = `http://localhost:8080/v1/points/log?page=${page}&size=10&status=CHARGE`;
+          apiUrl = `https://api.dcns-wantit.shop/v1/points/log?page=${page}&size=10&status=CHARGE`;
           break;
         case "withdraw":
-          apiUrl = `http://localhost:8080/v1/points/log?page=${page}&size=10&status=WITHDRAWAL`;
+          apiUrl = `https://api.dcns-wantit.shop/v1/points/log?page=${page}&size=10&status=WITHDRAWAL`;
           break;
         case "bid":
-          apiUrl = `http://localhost:8080/v1/points/log?page=${page}&size=10&status=SUCCESSFUL_BID`;
+          apiUrl = `https://api.dcns-wantit.shop/v1/points/log?page=${page}&size=10&status=SUCCESSFUL_BID`;
           break;
         default:
-          apiUrl = `http://localhost:8080/v1/points/log?page=${page}&size=10`;
+          apiUrl = `https://api.dcns-wantit.shop/v1/points/log?page=${page}&size=10`;
       }
       axios
         .get(apiUrl, {

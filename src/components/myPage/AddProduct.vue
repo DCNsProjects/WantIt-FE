@@ -137,7 +137,7 @@ export default {
     async createProduct() {
       try {
         axios.post(
-          "http://localhost:8080/v1/my/auction-items",
+          "https://api.dcns-wantit.shop/v1/my/auction-items",
           {
             itemName: this.itemName,
             itemDescription: this.itemDescription,

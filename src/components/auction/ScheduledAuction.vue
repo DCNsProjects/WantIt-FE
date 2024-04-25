@@ -35,7 +35,7 @@ export default {
   methods: {
     async getScheduledItems(page = 1) {
       axios
-        .get(`http://localhost:8080/v1/auction-items/ready?page=${page}&size=5`, {
+        .get(`https://api.dcns-wantit.shop/v1/auction-items/ready?page=${page}&size=5`, {
           proxy: {
             protocol: "http",
             host: "127.0.0.1",

@@ -67,7 +67,7 @@
         try {
           const response = await axios({
             method: 'patch',
-            url: 'http://localhost:8080/v1/users/password',
+            url: 'https://api.dcns-wantit.shop/v1/users/password',
             data: {
               password: this.password,
               changePassword: this.changePassword,

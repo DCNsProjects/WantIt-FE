@@ -60,7 +60,7 @@ export default {
         }
         const response = await axios({
           method: 'get',
-          url: `http://localhost:8080/v1/auction-items/${auctionItemId}/finished`,
+          url: `https://api.dcns-wantit.shop/v1/auction-items/${auctionItemId}/finished`,
           headers: {
             'Authorization': accessToken
           }

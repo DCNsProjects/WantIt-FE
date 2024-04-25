@@ -4,7 +4,7 @@
       <h4></h4>
       <p>정보가 수정되었습니다.</p><br>
       <div class="button-right">
-        <button type="button" class="btn btn-secondary btn-sm" @click="modalBox = false">확인</button>
+        <button type="button" class="btn btn-secondary btn-sm" @click="close">확인</button>
       </div>
     </div>
   </div>
@@ -79,7 +79,7 @@ export default {
         }
         const response = await axios({
           method: 'get',
-          url: 'http://localhost:8080/v1/users',
+          url: 'https://api.dcns-wantit.shop/v1/users',
           headers: {
             'Authorization': accessToken // 헤더에 토큰 추가
           }
@@ -94,7 +94,6 @@ export default {
     },
     async updateInfo() {
       let accessToken = localStorage.getItem('accessToken');
-      accessToken = accessToken['data'];
       if (!accessToken) {
         alert('로그인 후 다시 시도해주세요.');
         this.goToLoginPage();
@@ -103,7 +102,7 @@ export default {
       try {
         await axios({
           method: 'put',
-          url: 'http://localhost:8080/v1/users',
+          url: 'https://api.dcns-wantit.shop/v1/users',
           data: {
             nickname: this.nickname,
             phoneNumber: this.phoneNumber,
@@ -128,8 +127,9 @@ export default {
       this.$router.push('/update-password');
     },
 
-    openModal() {
-      this.modalBox = true;
+    close() {
+      this.modalBox = false;
+      this.fetchUserInfo();
     },
   },
 

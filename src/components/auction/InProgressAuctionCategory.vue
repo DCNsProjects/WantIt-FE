@@ -69,7 +69,7 @@ export default {
     async getAuctionItemList(category, page=1) {
       axios
         .get(
-          `http://localhost:8080/v1/auction-items/in-progress?page=${page}&size=5&category=`+category,
+          `https://api.dcns-wantit.shop/v1/auction-items/in-progress?page=${page}&size=5&category=`+category,
           {
             proxy: {
               protocol: "http",

@@ -168,7 +168,7 @@ export default {
         alert("로그인 후 다시 시도해주세요.");
       }
       axios
-        .get("http://localhost:8080/v1/points", {
+        .get("https://api.dcns-wantit.shop/v1/points", {
           proxy: {
             protocol: "http",
             host: "127.0.0.1",
@@ -187,7 +187,7 @@ export default {
     async charge() {
       try {
         const response = await axios.post(
-          "http://localhost:8080/v1/points/charge",
+          "https://api.dcns-wantit.shop/v1/points/charge",
           {
             changedPoint: this.point,
             details: "충전",
@@ -213,7 +213,7 @@ export default {
     async withdraw() {
       try {
         const response = await axios.post(
-          "http://localhost:8080/v1/points/withdrawal",
+          "https://api.dcns-wantit.shop/v1/points/withdrawal",
           {
             changedPoint: -this.point,
             details: "출금",
