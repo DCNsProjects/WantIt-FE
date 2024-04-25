@@ -138,7 +138,7 @@ export default {
   methods: {
     async sendVerificationEmail() {
       try {
-        const response = await axios.post("http://localhost:8080/v1/users/emails/authcode", {
+        const response = await axios.post("https://api.dcns-wantit.shop/v1/users/emails/authcode", {
           email: this.email
         });
         console.log('Email 인증 요청:', response);
@@ -151,7 +151,7 @@ export default {
 
     async confirmEmail() {
       try {
-        const response = await axios.post("http://localhost:8080/v1/users/emails/authcode/verify", {
+        const response = await axios.post("https://api.dcns-wantit.shop/v1/users/emails/authcode/verify", {
           code: this.confirmationCode,
           email: this.email
         });
@@ -192,7 +192,7 @@ export default {
     async signUp()
     {
       const instance = axios.create({
-        baseURL: "http://localhost:8080",
+        baseURL: "https://api.dcns-wantit.shop",
       });
 
       try {

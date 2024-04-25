@@ -2,9 +2,15 @@
   <div class="black-bg" v-if="TrueModalBox == true">
     <div class="white-bg">
       <h4></h4>
-      <p>선택한 경매 상품 찜하기가 되었습니다. </p><br>
+      <p>선택한 경매 상품 찜하기가 되었습니다.</p>
+      <br />
       <div class="button-right">
-        <button type="button" class="btn btn-secondary btn-sm" @click="TrueModalBox = false">닫기
+        <button
+          type="button"
+          class="btn btn-secondary btn-sm"
+          @click="TrueModalBox = false"
+        >
+          닫기
         </button>
       </div>
     </div>
@@ -13,9 +19,15 @@
   <div class="black-bg" v-if="FalseModalBox == true">
     <div class="white-bg">
       <h4></h4>
-      <p>선택한 경매 상품 찜하기가 취소 되었습니다. </p><br>
+      <p>선택한 경매 상품 찜하기가 취소 되었습니다.</p>
+      <br />
       <div class="button-right">
-        <button type="button" class="btn btn-secondary btn-sm" @click="FalseModalBox = false">닫기
+        <button
+          type="button"
+          class="btn btn-secondary btn-sm"
+          @click="FalseModalBox = false"
+        >
+          닫기
         </button>
       </div>
     </div>
@@ -23,18 +35,19 @@
 
   <div>
     <div class="page_title">
-      <h2 class="page_title">내가 입찰한 경매상품 목록 조회</h2>
+      <h2 class="page_title">입찰 내역</h2>
     </div>
-    <div class="items" style="margin-bottom: 40px;">
-      <h3 class="title"> 내가 입찰한 경매상품 목록 </h3>
+    <div class="items" style="margin-bottom: 40px">
+      <h3 class="title">입찰 내역</h3>
       <article class="auctionItem" v-for="(item, index) in itemList" :key="index">
         <figure class="thumbnail">
           <img
-              src=""
-              width="500" height="500">
+            src="https://www.seoulauction.com/nas_img/front/online0888/thum/d1aa1685-65ce-48cf-ae11-9a0d8f22f700.jpg"
+            width="500"
+            height="500"
+          />
         </figure>
         <div class="auction_info">
-
           <div class="description">
             <dl>
               <dt>상품명</dt>
@@ -42,111 +55,149 @@
             </dl>
             <dl>
               <dt>입찰가</dt>
-              <dd>{{ item.bidPrice.toLocaleString() }} 원</dd>
+              <dd>{{ formatPrice(item.bidPrice) }} 원</dd>
             </dl>
             <dl>
               <dt>입찰하기 시작한 날짜</dt>
-              <dd>{{ new Date(item.createdAt).toISOString().substring(0, 10) }}</dd>
+              <dd>{{ formatDate(item.createdAt) }}</dd>
             </dl>
             <dl>
               <dt>마지막 입찰 날짜</dt>
-              <dd>{{ new Date(item.updatedAt).toISOString().substring(0, 10) }}</dd>
+              <dd>{{ formatDate(item.updatedAt) }}</dd>
             </dl>
             <button @click="goToBidPage(item.auctionItemId)">상세보기</button>
           </div>
         </div>
 
         <div class="likes">
-          <button type="button" class="btn btn-secondary btn-lg" @click="like(item.auctionItemId)">
+          <button
+            type="button"
+            class="btn btn-secondary btn-lg"
+            @click="like(item.auctionItemId)"
+          >
             ♥
           </button>
         </div>
       </article>
     </div>
   </div>
+
+  <div class="pagination">
+    <button @click="prevPage" :disabled="currentPage <= 1">&lt;</button>
+    <span>{{ currentPage }} / {{ totalPage }}</span>
+    <button @click="nextPage" :disabled="currentPage >= totalPage">&gt;</button>
+  </div>
 </template>
+
 <script>
 import axios from "axios";
 
 export default {
-  name: 'App',
+  name: "App",
   data() {
     return {
       TrueModalBox: false,
       FalseModalBox: false,
       itemList: [],
-    }
+      currentPage: 1,
+      totalPage: 1,
+    };
   },
-
+  mounted() {
+    this.MyBidList();
+  },
   methods: {
+    formatPrice(price) {
+      return price.toLocaleString();
+    },
+
+    formatDate(date) {
+      const formattedDate = new Date(date);
+      return formattedDate.toISOString().split("T")[0];
+    },
+
     goToBidPage(auctionItemId) {
       this.$router.push(`/bids/${auctionItemId}`);
     },
-
-    async MyBidList() {
+    goToLoginPage() {
+      this.$router.push("/login");
+    },
+    async MyBidList(page = 1) {
       try {
-        let accessToken = localStorage.getItem('accessToken');
+        let accessToken = localStorage.getItem("accessToken");
         if (!accessToken) {
-          alert('로그인 후 다시 시도해주세요.');
+          alert("로그인 후 다시 시도해주세요.");
+          this.goToLoginPage();
           return;
         }
         const response = await axios({
-          method: 'get',
-          url: 'http://localhost:8080/v1/auction-items/bids',
+          method: "get",
+          url: `https://api.dcns-wantit.shop/v1/auction-items/bids?page=${page}&size=5`,
           headers: {
-            'Authorization': accessToken
-          }
+            Authorization: accessToken,
+          },
         });
-        this.itemList = response.data.data;
-        console.log('response.data.data :', response.data.data);
+        console.log(response);
+        const result = response.data;
+        this.itemList = result.data.bidResponseDtoList;
+        this.currentPage = page;
+        this.totalPage = result.data.totalPage;
+        console.log("response.data.data :", response.data.data);
       } catch (error) {
-        console.error('Error fetching user info:', error);
+        console.error("Error fetching user info:", error);
       }
     },
 
     async like(auctionItemId) {
-      let accessToken = localStorage.getItem('accessToken');
+      let accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
-        alert('로그인 후 다시 시도해주세요.');
+        alert("로그인 후 다시 시도해주세요.");
+        this.goToLoginPage();
         return;
       }
 
       try {
         const response = await axios({
-          method: 'post',
-          url: `http://localhost:8080/v1/auction-items/${auctionItemId}/likes`,
+          method: "post",
+          url: `https://api.dcns-wantit.shop/v1/auction-items/${auctionItemId}/likes`,
           headers: {
-            'Authorization': accessToken
-          }
+            Authorization: accessToken,
+          },
         });
 
-        console.log('like response :', response.data.data);
-        console.log('like  :', response.data.data.liked);
+        console.log("like response :", response.data.data);
+        console.log("like  :", response.data.data.liked);
 
         if (response.data.data.liked == true) {
           this.TrueModalBox = true;
         } else if (response.data.data.liked == false) {
           this.FalseModalBox = true;
         }
-
       } catch (error) {
         if (error.response && error.response.data) {
           alert(error.response.data.message);
         } else {
-          alert('좋아요가 제대로 반영되지 못했습니다. 다시 시도해주세요.');
+          alert("좋아요가 제대로 반영되지 못했습니다. 다시 시도해주세요.");
         }
       }
-    }
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.MyBidList(this.currentPage - 1);
+      }
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPage) {
+        this.MyBidList(this.currentPage + 1);
+      }
+    },
   },
-  mounted() {
-    this.MyBidList();
-  },
-}
+};
 </script>
 
 <style scoped>
 body {
-  margin: 0
+  margin: 0;
 }
 
 div {
@@ -171,7 +222,6 @@ div {
   border-bottom: 1px solid #ddd; /* 1px 두께의 더 옅은 색상의 경계선 */
   padding-bottom: 40px; /* 추가: 경계선을 요소의 상단에서 더 위에 위치시킴 */
   padding-top: 40px; /* 추가: 경계선을 요소의 하단에서 더 아래에 위치시킴 */
-
 }
 
 .auction_info {
@@ -202,7 +252,6 @@ div {
   line-height: 30px;
   margin: 30px 0 20px 150px; /* top right bottom left  */
 }
-
 
 .title {
   font-size: 24px;
@@ -264,5 +313,20 @@ li button {
   transform: translate(-50%, -50%);
   text-align: center;
 }
+.pagination {
+  background: transparent;
+  border: none;
+  font-size: 1.5em;
+  color: #333;
+  border-radius: 50%;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  border: none;
+}
 </style>

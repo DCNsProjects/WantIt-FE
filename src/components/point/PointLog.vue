@@ -18,13 +18,18 @@
           <div class="details gap-3">
             <div class="hstack gap-3">
               <div class="description">{{ item.details }}</div>
-              <!-- <div class="withdraw">{{ item.status }}</div> -->
               <div class="amount">{{ formattedBid(item.changedPoint) }} points</div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="pagination">
+    <button @click="prevPage" :disabled="currentPage <= 1">&lt;</button>
+    <span>{{ currentPage }} / {{ totalPage }}</span>
+    <button @click="nextPage" :disabled="currentPage >= totalPage">&gt;</button>
   </div>
 </template>
 
@@ -40,6 +45,8 @@ export default {
       상세내역: "경매 낙찰",
       상태: "출금",
       포인트: 1000000,
+      currentPage: 1,
+      totalPage: 1,
     };
   },
   created() {
@@ -47,40 +54,49 @@ export default {
     this.getPointLog();
   },
   methods: {
-    async getPointLog() {
+    async getPointLog(page = 1) {
+      let accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) {
+        alert("로그인 후 다시 시도해주세요.");
+      }
       axios
-        .get("http://localhost:8080/v1/points/log?page=1&size=10", {
+        .get(`https://api.dcns-wantit.shop/v1/points/log?page=${page}&size=10`, {
           proxy: {
             protocol: "http",
             host: "127.0.0.1",
             port: 8080,
           },
           headers: {
-            Authorization: localStorage.getItem("accessToken"),
+            Authorization: accessToken,
           },
         })
         .then((response) => {
           console.log(response);
           const result = response.data;
           this.items = result.data.pointLogResponseDtoList;
+          this.currentPage = page;
+          this.totalPage = result.data.totalPage;
         });
     },
-    async changeFilter(event) {
+    async changeFilter(event, page = 1) {
+      let accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) {
+        alert("로그인 후 다시 시도해주세요.");
+      }
       const selectFilter = event.target.value;
       let apiUrl = "";
       switch (selectFilter) {
         case "charge":
-          apiUrl = "http://localhost:8080/v1/points/log?page=1&size=10&status=CHARGE";
+          apiUrl = `https://api.dcns-wantit.shop/v1/points/log?page=${page}&size=10&status=CHARGE`;
           break;
         case "withdraw":
-          apiUrl = "http://localhost:8080/v1/points/log?page=1&size=10&status=WITHDRAWAL";
+          apiUrl = `https://api.dcns-wantit.shop/v1/points/log?page=${page}&size=10&status=WITHDRAWAL`;
           break;
         case "bid":
-          apiUrl =
-            "http://localhost:8080/v1/points/log?page=1&size=10&status=SUCCESSFUL_BID";
+          apiUrl = `https://api.dcns-wantit.shop/v1/points/log?page=${page}&size=10&status=SUCCESSFUL_BID`;
           break;
         default:
-          apiUrl = "http://localhost:8080/v1/points/log?page=1&size=10";
+          apiUrl = `https://api.dcns-wantit.shop/v1/points/log?page=${page}&size=10`;
       }
       axios
         .get(apiUrl, {
@@ -90,17 +106,29 @@ export default {
             port: 8080,
           },
           headers: {
-            Authorization: localStorage.getItem("accessToken"),
+            Authorization: accessToken,
           },
         })
         .then((response) => {
           console.log(response);
           const result = response.data;
           this.items = result.data.pointLogResponseDtoList;
+          this.currentPage = page;
+          this.totalPage = result.data.totalPage;
         });
     },
     formattedBid(price) {
-      return price !== undefined ? price.toLocaleString() : '0';
+      return price !== undefined ? price.toLocaleString() : "0";
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.getPointLog(this.currentPage - 1);
+      }
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPage) {
+        this.getPointLog(this.currentPage + 1);
+      }
     },
   },
   components: {},
@@ -161,5 +189,22 @@ export default {
 .form-label {
   font-weight: bold;
   margin-top: 10px;
+}
+
+.pagination {
+  background: transparent;
+  border: none;
+  font-size: 1.5em;
+  color: #333;
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  border: none;
 }
 </style>

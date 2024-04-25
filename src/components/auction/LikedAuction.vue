@@ -63,17 +63,20 @@ export default {
     goToBidPage(auctionItemId) {
       this.$router.push(`/bids/${auctionItemId}`);
     },
-
+    goToLoginPage() {
+      this.$router.push('/login');
+    },
     async MyLikedAuctionItems() {
       try {
         let accessToken = localStorage.getItem('accessToken');
         if (!accessToken) {
           alert('로그인 후 다시 시도해주세요.');
+          this.goToLoginPage();
           return;
         }
         const response = await axios({
           method: 'get',
-          url: 'http://localhost:8080/v1/auction-items/likes',
+          url: 'https://api.dcns-wantit.shop/v1/auction-items/likes',
           params: {},
           headers: {
             'Authorization': accessToken // 헤더에 토큰 추가
@@ -90,13 +93,14 @@ export default {
       let accessToken = localStorage.getItem('accessToken');
       if (!accessToken) {
         alert('로그인 후 다시 시도해주세요.');
+        this.goToLoginPage();
         return;
       }
 
       try {
         await axios({
           method: 'post',
-          url: `http://localhost:8080/v1/auction-items/${auctionItemId}/likes`,
+          url: `https://api.dcns-wantit.shop/v1/auction-items/${auctionItemId}/likes`,
           headers: {
             'Authorization': accessToken
           }

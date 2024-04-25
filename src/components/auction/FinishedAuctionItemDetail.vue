@@ -40,7 +40,7 @@ export default {
     },
     async getAuctionItem(auctionItemId) {
       axios
-        .get("http://localhost:8080/v1/auction-items/" + auctionItemId, {
+        .get("https://api.dcns-wantit.shop/v1/auction-items/" + auctionItemId, {
           proxy: {
             protocol: "http",
             host: "127.0.0.1",

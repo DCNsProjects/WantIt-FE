@@ -101,12 +101,14 @@
               font-weight: bold;
             "
           >
-            {{ item.nickName + "  (" + item.username + ")  "}} 
+            {{ item.nickName + "  (" + item.username + ")  " }}
           </div>
           <div style="margin-left: 10px; margin-bottom: 5px">
             포인트: {{ formattedBid(item.point) }}
           </div>
-          <div style="margin-left: 10px">가용 포인트: {{ formattedBid(item.availablePoint) }}</div>
+          <div style="margin-left: 10px">
+            가용 포인트: {{ formattedBid(item.availablePoint) }}
+          </div>
         </div>
       </div>
     </div>
@@ -161,15 +163,19 @@ export default {
       this.$router.push("/point-log");
     },
     async getPoint() {
+      let accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) {
+        alert("로그인 후 다시 시도해주세요.");
+      }
       axios
-        .get("http://localhost:8080/v1/points", {
+        .get("https://api.dcns-wantit.shop/v1/points", {
           proxy: {
             protocol: "http",
             host: "127.0.0.1",
             port: 8080,
           },
           headers: {
-            Authorization: localStorage.getItem("accessToken"),
+            Authorization: accessToken,
           },
         })
         .then((response) => {
@@ -181,7 +187,7 @@ export default {
     async charge() {
       try {
         const response = await axios.post(
-          "http://localhost:8080/v1/points/charge",
+          "https://api.dcns-wantit.shop/v1/points/charge",
           {
             changedPoint: this.point,
             details: "충전",
@@ -207,7 +213,7 @@ export default {
     async withdraw() {
       try {
         const response = await axios.post(
-          "http://localhost:8080/v1/points/withdrawal",
+          "https://api.dcns-wantit.shop/v1/points/withdrawal",
           {
             changedPoint: -this.point,
             details: "출금",
@@ -231,7 +237,7 @@ export default {
       }
     },
     formattedBid(price) {
-      return price !== undefined ? price.toLocaleString() : '0';
+      return price !== undefined ? price.toLocaleString() : "0";
     },
   },
   components: {},

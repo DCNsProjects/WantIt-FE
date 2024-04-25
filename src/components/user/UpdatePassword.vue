@@ -60,13 +60,14 @@
         // 토큰이 없을 경우 처리
         if (!accessToken) {
           alert('로그인 후 다시 시도해주세요.');
+          this.goToLoginPage();
           return;
         }
 
         try {
           const response = await axios({
             method: 'patch',
-            url: 'http://localhost:8080/v1/users/password',
+            url: 'https://api.dcns-wantit.shop/v1/users/password',
             data: {
               password: this.password,
               changePassword: this.changePassword,

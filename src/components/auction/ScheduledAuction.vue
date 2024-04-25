@@ -18,6 +18,12 @@
       </div>
     </div>
   </div>
+
+  <div class="pagination">
+    <button @click="prevPage" :disabled="currentPage <= 1">&lt;</button>
+    <span>{{ currentPage }} / {{ totalPage }}</span>
+    <button @click="nextPage" :disabled="currentPage >= totalPage">&gt;</button>
+  </div>
 </template>
 
 <script>
@@ -27,9 +33,9 @@ export default {
   name: "ScheduledAuction",
 
   methods: {
-    async getScheduledItems() {
+    async getScheduledItems(page = 1) {
       axios
-        .get("http://localhost:8080/v1/auction-items/ready?page=1&size=5", {
+        .get(`https://api.dcns-wantit.shop/v1/auction-items/ready?page=${page}&size=5`, {
           proxy: {
             protocol: "http",
             host: "127.0.0.1",
@@ -39,11 +45,13 @@ export default {
         .then((response) => {
           const result = response.data;
           this.scheduledItems = result.data.responseDtoList;
+          this.currentPage = page;
+          this.totalPage = result.data.totalPage;
           console.log(this.scheduledItems);
         });
     },
     formattedBid(price) {
-      return price !== undefined ? price.toLocaleString() : '0';
+      return price !== undefined ? price.toLocaleString() : "0";
     },
     bid(auctionItemId) {
       this.$router.push({
@@ -54,6 +62,16 @@ export default {
         },
       });
     },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.getScheduledItems(this.currentPage - 1);
+      }
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPage) {
+        this.getScheduledItems(this.currentPage + 1);
+      }
+    },
   },
   created() {
     this.getScheduledItems();
@@ -62,6 +80,8 @@ export default {
   data() {
     return {
       scheduledItems: [],
+      currentPage: 1,
+      totalPage: 1,
     };
   },
 };
@@ -108,5 +128,28 @@ export default {
 
 .card-text {
   font-size: 15px;
+}
+.pagination {
+  background: transparent;
+  border: none;
+  font-size: 1.5em;
+  color: #333;
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+.pagination button {
+  border: none;
+}
+li {
+  margin-right: 5px;
+}
+
+li button {
+  margin: 0;
+  padding: 0;
 }
 </style>
