@@ -14,7 +14,7 @@
         <p class="card-text">경매 시작 금액 : {{ formattedBid(item.minPrice) }}원</p>
       </div>
       <div class="card-footer text-body-secondary">
-        <p class="card-text">경매 시작 일자 : {{ item.startDate }}</p>
+        <p class="card-text">경매 시작 일자 : {{ formatDate(item.startDate) }}</p>
       </div>
     </div>
   </div>
@@ -33,6 +33,10 @@ export default {
   name: "ScheduledAuction",
 
   methods: {
+    formatDate(date) {
+      const formattedDate = new Date(date);
+      return formattedDate.toISOString().split("T")[0];
+    },
     async getScheduledItems(page = 1) {
       axios
         .get(`https://api.dcns-wantit.shop/v1/auction-items/ready?page=${page}&size=5`, {

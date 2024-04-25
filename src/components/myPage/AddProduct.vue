@@ -149,7 +149,7 @@ export default {
       let parts = str.split("-");
       let year = parseInt(parts[0], 10);
       let month = parseInt(parts[1], 10) - 1;
-      let day = parseInt(parts[2], 10);
+      let day = parseInt(parts[2], 10) + 1;
 
       let date = new Date(year, month, day);
       date.setHours(0, 0, 0, 0);
