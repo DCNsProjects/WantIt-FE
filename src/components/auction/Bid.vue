@@ -237,7 +237,7 @@ export default {
     },
     async getAuctionItem(auctionItemId) {
       axios
-        .get("http://localhost:8080/v1/auction-items/" + auctionItemId, {
+        .get("https://api.dcns-wantit.shop/v1/auction-items/" + auctionItemId, {
           proxy: {
             protocol: "http",
             host: "127.0.0.1",
@@ -253,7 +253,7 @@ export default {
     },
     async getTopBid(auctionItemId) {
       axios
-        .get("http://localhost:8080/v1/auction-items/" + auctionItemId + "/bids/top", {
+        .get("https://api.dcns-wantit.shop/v1/auction-items/" + auctionItemId + "/bids/top", {
           proxy: {
             protocol: "http",
             host: "127.0.0.1",
@@ -269,7 +269,7 @@ export default {
     async like() {
       console.log(localStorage.getItem("accessToken"));
       await axios.post(
-        "http://localhost:8080/v1/auction-items/" + this.auctionItemId + "/likes",
+        "https://api.dcns-wantit.shop/v1/auction-items/" + this.auctionItemId + "/likes",
         null,
         {
           headers: {
@@ -286,7 +286,7 @@ export default {
     async createBid(auctionItemId) {
       try {
         const response = await axios.post(
-          "http://localhost:8080/v1/auction-items/" + auctionItemId + "/bids",
+          "https://api.dcns-wantit.shop/v1/auction-items/" + auctionItemId + "/bids",
           {
             bidPrice: this.bid,
           },
@@ -312,11 +312,11 @@ export default {
   created() {
     // const EventSource = NativeEventSource || EventSourcePolyfill;
     const url =
-      "url : http://localhost:8080/v1/live-bids/auction-items/" + this.$route.params.id;
+      "url : https://api.dcns-wantit.shop/v1/live-bids/auction-items/" + this.$route.params.id;
     console.log(url);
 
     const eventSource = new EventSource(
-      "http://localhost:8080/v1/live-bids/auction-items/" + this.$route.params.id
+      "https://api.dcns-wantit.shop/v1/live-bids/auction-items/" + this.$route.params.id
     );
 
     eventSource.addEventListener("bidUpdate", (event) => {

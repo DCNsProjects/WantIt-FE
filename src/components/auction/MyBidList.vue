@@ -132,7 +132,7 @@ export default {
         }
         const response = await axios({
           method: "get",
-          url: `http://localhost:8080/v1/auction-items/bids?page=${page}&size=5`,
+          url: `https://api.dcns-wantit.shop/v1/auction-items/bids?page=${page}&size=5`,
           headers: {
             Authorization: accessToken,
           },
@@ -159,7 +159,7 @@ export default {
       try {
         const response = await axios({
           method: "post",
-          url: `http://localhost:8080/v1/auction-items/${auctionItemId}/likes`,
+          url: `https://api.dcns-wantit.shop/v1/auction-items/${auctionItemId}/likes`,
           headers: {
             Authorization: accessToken,
           },

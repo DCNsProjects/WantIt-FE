@@ -73,7 +73,7 @@ export default {
         localStorage.removeItem('accessToken');
         const response = await axios({
           method: 'post',
-          url: 'http://localhost:8080/v1/users/login',
+          url: 'https://api.dcns-wantit.shop/v1/users/login',
           data: {
             email: this.email,
             password: this.password,

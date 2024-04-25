@@ -79,7 +79,7 @@ export default {
         }
         const response = await axios({
           method: 'get',
-          url: 'http://localhost:8080/v1/users',
+          url: 'https://api.dcns-wantit.shop/v1/users',
           headers: {
             'Authorization': accessToken // 헤더에 토큰 추가
           }
@@ -102,7 +102,7 @@ export default {
       try {
         await axios({
           method: 'put',
-          url: 'http://localhost:8080/v1/users',
+          url: 'https://api.dcns-wantit.shop/v1/users',
           data: {
             nickname: this.nickname,
             phoneNumber: this.phoneNumber,

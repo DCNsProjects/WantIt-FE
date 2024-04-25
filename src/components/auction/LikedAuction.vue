@@ -76,7 +76,7 @@ export default {
         }
         const response = await axios({
           method: 'get',
-          url: 'http://localhost:8080/v1/auction-items/likes',
+          url: 'https://api.dcns-wantit.shop/v1/auction-items/likes',
           params: {},
           headers: {
             'Authorization': accessToken // 헤더에 토큰 추가
@@ -100,7 +100,7 @@ export default {
       try {
         await axios({
           method: 'post',
-          url: `http://localhost:8080/v1/auction-items/${auctionItemId}/likes`,
+          url: `https://api.dcns-wantit.shop/v1/auction-items/${auctionItemId}/likes`,
           headers: {
             'Authorization': accessToken
           }

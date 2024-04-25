@@ -107,7 +107,7 @@ export default {
     async updateProduct() {
       try {
         axios.put(
-          "http://localhost:8080/v1/my/auction-items/" + this.auctionItemId,
+          "https://api.dcns-wantit.shop/v1/my/auction-items/" + this.auctionItemId,
           {
             itemName: this.itemName,
             itemDescription: this.itemDescription,
