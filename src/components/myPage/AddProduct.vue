@@ -6,10 +6,10 @@
       </h1>
       <p class="lead">
         ❗ 본 페이지에서 경매품을 등록할 수 있습니다. ❗<br />
-        ❗ 판매 금지 품목은 경고 없이 삭제될 수 있습니다. ❗<br />
+        ❗ 판매 금지 품목은 등록이 불가능합니다. ❗<br />
         ❗ 경매 시작일은 현재 날짜로부터 최소 1일 이후부터 설정 가능합니다.
         ❗<br />
-        ❗ 경매 종료는 시작당일 오후 7시에 자동으로 종료됩니다. ❗<br />
+        ❗ 경매 오픈 시각 09:00 , 경매 마감 시각 19:00 ❗<br />
       </p>
     </div>
   </div>
@@ -145,72 +145,44 @@ export default {
       today = yyyy + "-" + mm + "-" + dd;
       return today;
     },
-    convertToDate(str) {
+    convertToDate(str, hour) {
       let parts = str.split("-");
       let year = parseInt(parts[0], 10);
       let month = parseInt(parts[1], 10) - 1;
       let day = parseInt(parts[2], 10);
 
-      let date = new Date(year, month, day);
-      date.setHours(0, 0, 0, 0);
+      let date = new Date(Date.UTC(year, month, day));
+      date.setUTCHours(hour,0,0,0);
 
       return date;
     },
     async createProductWithImage() {
+      try{
       const formData = new FormData();
       const dto = {
         itemName: this.itemName,
         itemDescription: this.itemDescription,
         minPrice: this.minPrice,
         category: this.category,
-        startDate: this.convertToDate(this.startDate),
-        endDate: this.convertToDate(this.endDate),
+        startDate: this.convertToDate(this.startDate, 9),
+        endDate: this.convertToDate(this.endDate, 19),
       };
-      const jsonDto = JSON.stringify(dto);
-      const blob = new Blob([jsonDto], { type: "application/json" });
+
+      const blob = new Blob([JSON.stringify(dto)], { type: "application/json" });
 
       formData.append("file", this.imageFile);
-      formData.append(
-        "requestBody",
-        blob
-      );
-      const response = await axios.post(
+      formData.append("requestBody", blob);
+      await axios.post(
         "https://api.dcns-wantit.shop/v1/my/auction-items",
         formData,
         {
           headers: {
             Authorization: localStorage.getItem("accessToken"),
           },
-          proxy: {
-            protocol: "http",
-            host: "127.0.0.1",
-            port: 8080,
-          },
         }
       );
-
-      console.log(response);
-    },
-    async createProduct() {
-      try {
-        axios.post(
-          "https://api.dcns-wantit.shop/v1/my/auction-items",
-          {
-            itemName: this.itemName,
-            itemDescription: this.itemDescription,
-            minPrice: this.minPrice,
-            category: this.category,
-            startDate: this.convertToDate(this.startDate),
-            endDate: this.convertToDate(this.endDate),
-          },
-          {
-            headers: {
-              Authorization: localStorage.getItem("accessToken"),
-            },
-          }
-        );
-        alert("상품이 등록되었습니다.");
-        this.$router.push("/");
+      alert("상품이 등록되었습니다.");
+      this.$router.push("/");
       } catch (error) {
         alert("상품 등록에 실패하엿습니다. 다시 시도해주세요.");
       }
