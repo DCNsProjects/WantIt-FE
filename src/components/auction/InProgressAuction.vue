@@ -25,7 +25,7 @@
           <div class="v-line"></div>
           <div class="right">
             <div class="product-img">
-              <img alt="Item" src="" />
+              <img alt="item-image" :src="item.imageUrl" />
             </div>
           </div>
         </div>

@@ -2,7 +2,7 @@
   <div class="container">
     <h1 class="banner"><i class="bi bi-boxes"></i> My Auctions</h1>
     <div v-for="item in auctionItems" :key="item.id" class="auction-item">
-      <img :src="item.image" alt="Auction Item" class="item-image" />
+      <img :src="item.imageUrl" alt="Auction Item" class="item-image" />
       <div class="item-info">
         <h2 class="title">{{ item.itemName }}</h2>
         <p class="des">{{ shortDescription(item.itemDescription) }}</p>
@@ -46,7 +46,7 @@ export default {
       const accessToken = localStorage.getItem("accessToken");
 
       axios
-        .get(`https://api.dcns-wantit.shop/v1/my/auction-items?page=${page}&size=5`, {
+        .get(`http://localhost:8080/v1/my/auction-items?page=${page}&size=5`, {
           proxy: {
             protocol: "http",
             host: "127.0.0.1",

@@ -166,7 +166,7 @@
     <div class="split-screen">
       <div class="left">
         <div class="product-img">
-          <img alt="Vue logo" src="" />
+          <img alt="item-image" :src="item.imageUrl" />
         </div>
       </div>
       <div class="v-line"></div>
