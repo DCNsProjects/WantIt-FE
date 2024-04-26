@@ -4,7 +4,7 @@
       <div class="items finishedAuctionItems" style="margin-bottom: 40px">
         <div class="finishedAuctionCard" @click="detail(item.auctionItemId)">
           <img
-            src="https://www.seoulauction.com/nas_img/front/online0888/thum/d1aa1685-65ce-48cf-ae11-9a0d8f22f700.jpg"
+            :src="item.imageUrl"
             class="card-img-top"
             alt="..."
           />

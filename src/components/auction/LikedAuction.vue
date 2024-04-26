@@ -19,7 +19,7 @@
       <article class="auctionItem" v-for="(item, index) in itemList" :key="index">
         <figure class="thumbnail">
           <img
-              src="https://www.seoulauction.com/nas_img//front/main0892/7ce0281b-8928-4ff5-8857-dced87a87fa6.jpg"
+              :src="item.imageUrl"
               width="500" height="500">
         </figure>
         <div class="auction_info">

@@ -135,7 +135,39 @@ export default {
   methods: {
     imageUpload() {
       this.imageFile = this.$refs.images.files[0];
-      console.log(this.imageFile);
+    },
+    async createProductWithImage() {
+      try {
+        const formData = new FormData();
+        const dto = {
+          itemName: this.itemName,
+          itemDescription: this.itemDescription,
+          minPrice: this.minPrice,
+          category: this.category,
+          startDate: this.convertToDate(this.startDate, 9),
+          endDate: this.convertToDate(this.endDate, 19),
+        };
+
+        const blob = new Blob([JSON.stringify(dto)], {
+          type: "application/json",
+        });
+
+        formData.append("file", this.imageFile);
+        formData.append("requestBody", blob);
+        await axios.post(
+          "https://api.dcns-wantit.shop/v1/my/auction-items",
+          formData,
+          {
+            headers: {
+              Authorization: localStorage.getItem("accessToken"),
+            },
+          }
+        );
+        alert("상품이 등록되었습니다.");
+        this.$router.push("/");
+      } catch (error) {
+        alert("상품 등록에 실패하엿습니다. 다시 시도해주세요.");
+      }
     },
     getToday() {
       let today = new Date();
@@ -152,40 +184,9 @@ export default {
       let day = parseInt(parts[2], 10);
 
       let date = new Date(Date.UTC(year, month, day));
-      date.setUTCHours(hour,0,0,0);
+      date.setUTCHours(hour, 0, 0, 0);
 
       return date;
-    },
-    async createProductWithImage() {
-      try{
-      const formData = new FormData();
-      const dto = {
-        itemName: this.itemName,
-        itemDescription: this.itemDescription,
-        minPrice: this.minPrice,
-        category: this.category,
-        startDate: this.convertToDate(this.startDate, 9),
-        endDate: this.convertToDate(this.endDate, 19),
-      };
-
-      const blob = new Blob([JSON.stringify(dto)], { type: "application/json" });
-
-      formData.append("file", this.imageFile);
-      formData.append("requestBody", blob);
-      await axios.post(
-        "https://api.dcns-wantit.shop/v1/my/auction-items",
-        formData,
-        {
-          headers: {
-            Authorization: localStorage.getItem("accessToken"),
-          },
-        }
-      );
-      alert("상품이 등록되었습니다.");
-      this.$router.push("/");
-      } catch (error) {
-        alert("상품 등록에 실패하엿습니다. 다시 시도해주세요.");
-      }
     },
     async changeCategory(event) {
       const selectFilter = event.target.value;

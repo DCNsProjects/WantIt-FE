@@ -6,7 +6,7 @@
 
     <img
       class="finishedDetail_image"
-      src="https://www.seoulauction.com/nas_img/front/online0888/thum/d1aa1685-65ce-48cf-ae11-9a0d8f22f700.jpg"
+      :src="item.imageUrl"
       alt="..."
     />
     <hr class="finishedDetail_line" />
