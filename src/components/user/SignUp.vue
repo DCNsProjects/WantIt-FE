@@ -6,11 +6,6 @@
       <button type="button" class="btn btn-outline-secondary" @click="goToLoginPage">
         로그인 페이지로 이동
       </button>
-      <div class="button-right">
-        <button type="button" class="btn btn-secondary btn-sm" @click="modalBox = false">
-          확인
-        </button>
-      </div>
     </div>
   </div>
 
@@ -175,8 +170,6 @@ export default {
       }
     },
 
-
-
     goToLoginPage() {
       this.$router.push("/login");
     },
@@ -212,8 +205,7 @@ export default {
           alert('회원가입 실패했습니다. 다시 시도해주세요.');
         }
       }
-    }
-    ,
+    },
   },
   components: {},
 };
