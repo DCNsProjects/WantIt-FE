@@ -133,7 +133,7 @@ export default {
     };
   },
   methods: {
-    imageUpload(){
+    imageUpload() {
       this.imageFile = this.$refs.images.files[0];
       console.log(this.imageFile);
     },
@@ -156,28 +156,38 @@ export default {
 
       return date;
     },
-    async createProductWithImage(){
+    async createProductWithImage() {
       const formData = new FormData();
-      formData.append("file", this.imageFile);
-      formData.append("requestBody", JSON.stringify({
+      const dto = {
         itemName: this.itemName,
         itemDescription: this.itemDescription,
         minPrice: this.minPrice,
         category: this.category,
         startDate: this.convertToDate(this.startDate),
         endDate: this.convertToDate(this.endDate),
-      }));
-      const response = await axios.post("https://api.dcns-wantit.shop/v1/my/auction-items", formData, {
-        headers: {
-          Authorization: localStorage.getItem("accessToken"),
-          "Content-Type": "multipart/form-data",
-        },
-        proxy: {
-              protocol: "http",
-              host: "127.0.0.1",
-              port: 8080,
-            },
-      });
+      };
+      const jsonDto = JSON.stringify(dto);
+      const blob = new Blob([jsonDto], { type: "application/json" });
+
+      formData.append("file", this.imageFile);
+      formData.append(
+        "requestBody",
+        blob
+      );
+      const response = await axios.post(
+        "https://api.dcns-wantit.shop/v1/my/auction-items",
+        formData,
+        {
+          headers: {
+            Authorization: localStorage.getItem("accessToken"),
+          },
+          proxy: {
+            protocol: "http",
+            host: "127.0.0.1",
+            port: 8080,
+          },
+        }
+      );
 
       console.log(response);
     },
@@ -196,11 +206,6 @@ export default {
           {
             headers: {
               Authorization: localStorage.getItem("accessToken"),
-            },
-            proxy: {
-              protocol: "http",
-              host: "127.0.0.1",
-              port: 8080,
             },
           }
         );
