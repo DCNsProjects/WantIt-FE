@@ -70,13 +70,13 @@ export default {
         localStorage.removeItem('accessToken');
         const response = await axios({
           method: 'post',
-          url: 'https://api.dcns-wantit.shop/v1/users/login',
+          url: 'http://localhost:8080/v1/users/login',
           data: {
             email: this.email,
             password: this.password,
           }
         });
-        let accessToken = response.data.data;
+        let accessToken = response.headers.get('Authorization');
         localStorage.setItem('accessToken', accessToken);
         this.$router.push('/');
       } catch (error) {
