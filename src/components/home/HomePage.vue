@@ -1,6 +1,6 @@
 <template>
   <!-- top3 -->
-  <div id="myCarousel" class="carousel slide mb-3" data-bs-ride="carousel">
+  <div id="myCarousel" class="carousel slide mb-3" data-bs-ride="carousel" v-if = "items.length > 2">
     <div class="carousel-indicators">
       <button
         type="button"
@@ -31,17 +31,23 @@
           class="bd-placeholder-img"
           width="100%"
           height="100%"
-          :src="items[0].imageUrl"
+          src=""
           aria-hidden="true"
           preserveAspectRatio="xMidYMid slice"
           focusable="false"
         >
-          <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
+          <rect
+            width="100%"
+            height="100%"
+            fill="var(--bs-secondary-color)"
+          ></rect>
         </svg>
         <div class="container">
           <div class="carousel-caption text-start">
             <h1>실시간 입찰 수 1위</h1>
-            <p class="opacity-75" v-if = "items.length > 2">{{items[0].itemName}}</p>
+            <p class="opacity-75">
+              {{ items[0].itemName }}
+            </p>
             <p>
               <a
                 class="btn btn-lg btn-primary"
@@ -58,17 +64,23 @@
           class="bd-placeholder-img"
           width="100%"
           height="100%"
-          :src="items[1].imageUrl"
+          :src="items[0].imageUrl"
           aria-hidden="true"
           preserveAspectRatio="xMidYMid slice"
           focusable="false"
         >
-          <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
+          <rect
+            width="100%"
+            height="100%"
+            fill="var(--bs-secondary-color)"
+          ></rect>
         </svg>
         <div class="container">
           <div class="carousel-caption">
             <h1>실시간 입찰 수 2위</h1>
-            <p class="opacity-75" v-if = "items.length > 2">{{items[1].itemName}}</p>
+            <p class="opacity-75">
+              {{ items[1].itemName }}
+            </p>
             <p>
               <a
                 class="btn btn-lg btn-primary"
@@ -85,17 +97,23 @@
           class="bd-placeholder-img"
           width="100%"
           height="100%"
-          :src="items[2].imageUrl"
+          src=""
           aria-hidden="true"
           preserveAspectRatio="xMidYMid slice"
           focusable="false"
         >
-          <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
+          <rect
+            width="100%"
+            height="100%"
+            fill="var(--bs-secondary-color)"
+          ></rect>
         </svg>
         <div class="container">
           <div class="carousel-caption text-end">
             <h1>실시간 입찰 수 3위</h1>
-            <p class="opacity-75" v-if = "items.length > 2">{{items[2].itemName}}</p>
+            <p class="opacity-75">
+              {{ items[2].itemName }}
+            </p>
             <p>
               <a
                 class="btn btn-lg btn-primary"
@@ -294,14 +312,14 @@ export default {
         },
       });
     },
-    category(category){
+    category(category) {
       this.$router.push({
-        name:"category",
-        path:"/category",
-        params:{
+        name: "category",
+        path: "/category",
+        params: {
           id: category,
         },
-      })
+      });
     },
   },
   created() {
