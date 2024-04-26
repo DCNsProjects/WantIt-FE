@@ -14,10 +14,6 @@
                  v-model="password">
           <label for="floatingPassword">비밀번호</label>
         </div>
-        <div class="form-check text-start my-3">
-          <input class="form-check-input" type="checkbox" value="remember-me"
-                 id="flexCheckDefault">
-        </div>
         <div>
           <button type="submit" class="btn btn-primary w-100 py-2 sign-in-button" @click="fnLogin">
             로그인
