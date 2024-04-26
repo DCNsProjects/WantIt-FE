@@ -46,7 +46,7 @@ export default {
       const accessToken = localStorage.getItem("accessToken");
 
       axios
-        .get(`http://localhost:8080/v1/my/auction-items?page=${page}&size=5`, {
+        .get(`https://api.dcns-wantit.shop/v1/my/auction-items?page=${page}&size=5`, {
           proxy: {
             protocol: "http",
             host: "127.0.0.1",
