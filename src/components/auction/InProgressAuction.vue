@@ -73,11 +73,6 @@ export default {
     async getAuctionItemList(page = 1) {
       axios
         .get(`https://api.dcns-wantit.shop/v1/auction-items/in-progress?page=${page}&size=5`, {
-          proxy: {
-            protocol: "http",
-            host: "127.0.0.1",
-            port: 8080,
-          },
         })
         .then((response) => {
           const result = response.data;

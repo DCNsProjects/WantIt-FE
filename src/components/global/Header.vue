@@ -95,7 +95,6 @@ export default {
     },
 
     logout() {
-      // 로그아웃 요청 보내기
       localStorage.removeItem('accessToken');
       this.isLoggedIn = false;
       this.$router.push('/');

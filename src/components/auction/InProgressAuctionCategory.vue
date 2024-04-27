@@ -71,11 +71,6 @@ export default {
         .get(
           `https://api.dcns-wantit.shop/v1/auction-items/in-progress?page=${page}&size=5&category=`+category,
           {
-            proxy: {
-              protocol: "http",
-              host: "127.0.0.1",
-              port: 8080,
-            },
           }
         )
         .then((response) => {
