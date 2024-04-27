@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="page_title">
-      <h2 class="page_title"> 낙찰 내역  </h2>
+      <h2 class="page_title"> 낙찰 내역 </h2>
     </div>
     <div class="items" style="margin-bottom: 40px;">
-      <h3 class="title"> 낙찰 내역  </h3>
+      <h3 class="title"> 낙찰 내역 </h3>
       <article class="auctionItem" v-for="(item, index) in finishedItems" :key="index">
         <figure class="thumbnail">
           <img
@@ -25,9 +25,9 @@
     </div>
   </div>
   <div class="pagination">
-    <button @click="prevPage" :disabled="currentPage <= 1"> &lt; </button>
+    <button @click="prevPage" :disabled="currentPage <= 1"> &lt;</button>
     <span>{{ currentPage }} / {{ totalPage }}</span>
-    <button @click="nextPage" :disabled="currentPage >= totalPage"> &gt; </button>
+    <button @click="nextPage" :disabled="currentPage >= totalPage"> &gt;</button>
   </div>
 
 </template>
@@ -46,39 +46,58 @@ export default {
   },
 
   methods: {
-
     goToDetailPage(auctionItemId) {
       this.$router.push(`/auction-items/${auctionItemId}/finished`);
     },
 
+    async getNewAccessToken(errorResponse) {
+      localStorage.removeItem('accessToken');
+      let newAccessToken = errorResponse.headers.authorization;
+      localStorage.setItem('accessToken', newAccessToken);
+      await this.getFinishedAuctionItems(1);
+    },
+
     async getFinishedAuctionItems(page = 1) {
-      axios
-      .get(`https://api.dcns-wantit.shop/v1/auction-items/finished?page=${page}&size=5`, {
-        proxy: {
-          protocol: "http",
-          host: "127.0.0.1",
-          port: 8080,
-        },
-      })
-      .then((response) => {
+      try {
+        const accessToken = localStorage.getItem("accessToken");
+        const response = await axios.get(
+            `https://api.dcns-wantit.shop/v1/auction-items/finished?page=${page}&size=5`, {
+              headers: {
+                'Authorization': accessToken
+              }
+            });
         const result = response.data;
         this.finishedItems = result.data.responseDtoList;
         this.currentPage = page;
         this.totalPage = result.data.totalPage;
         console.log(this.finishedItems);
-      });
+      } catch (error) {
+        if (error.response) {
+          if (error.response.status === 401 || error.response.status === 403) {
+            await this.getNewAccessToken(error.response);
+          } else {
+            alert('다시 로그인해주세요');
+          }
+        } else {
+          console.error('Error : ', error);
+          alert('다시 로그인해주세요');
+        }
+      }
     },
+
     prevPage() {
       if (this.currentPage > 1) {
         this.getFinishedAuctionItems(this.currentPage - 1);
       }
     },
+
     nextPage() {
       if (this.currentPage < this.totalPage) {
         this.getFinishedAuctionItems(this.currentPage + 1);
       }
     },
   },
+
   created() {
     this.getFinishedAuctionItems();
   },
@@ -189,6 +208,7 @@ li button {
   margin: 0;
   padding: 0;
 }
+
 .pagination {
   background: transparent;
   border: none;
@@ -201,6 +221,7 @@ li button {
   align-items: center;
   margin-top: 20px;
 }
+
 .pagination button {
   border: none;
 }

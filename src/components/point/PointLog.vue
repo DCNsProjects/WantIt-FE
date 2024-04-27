@@ -54,30 +54,43 @@ export default {
     this.getPointLog();
   },
   methods: {
-    async getPointLog(page = 1) {
-      let accessToken = localStorage.getItem("accessToken");
-      if (!accessToken) {
-        alert("로그인 후 다시 시도해주세요.");
-      }
-      axios
-        .get(`https://api.dcns-wantit.shop/v1/points/log?page=${page}&size=10`, {
-          proxy: {
-            protocol: "http",
-            host: "127.0.0.1",
-            port: 8080,
-          },
-          headers: {
-            Authorization: accessToken,
-          },
-        })
-        .then((response) => {
-          console.log(response);
-          const result = response.data;
-          this.items = result.data.pointLogResponseDtoList;
-          this.currentPage = page;
-          this.totalPage = result.data.totalPage;
-        });
+    getNewAccessToken(errorResponse) {
+      localStorage.removeItem('accessToken');
+      let newAccessToken = errorResponse.headers.authorization;
+      localStorage.setItem('accessToken', newAccessToken);
+      this.getPointLog();
     },
+
+    async getPointLog(page = 1) {
+      try {
+        let accessToken = localStorage.getItem("accessToken");
+        if (!accessToken) {
+          alert("로그인 후 다시 시도해주세요.");
+        }
+        const response = await axios.get(
+            `https://api.dcns-wantit.shop/v1/points/log?page=${page}&size=10`,
+            {
+              headers: {
+                Authorization: accessToken,
+              },
+            });
+        console.log(response);
+        const result = response.data;
+        this.items = result.data.pointLogResponseDtoList;
+        this.currentPage = page;
+        this.totalPage = result.data.totalPage;
+      } catch (error) {
+        if (error.response) {
+          if (error.response.status === 401 || error.response.status === 403) {
+            await this.getNewAccessToken(error.response);
+          }
+        } else {
+          console.error('Error : ', error);
+          alert('다시 로그인해주세요');
+        }
+      }
+    },
+
     async changeFilter(event, page = 1) {
       let accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
@@ -99,32 +112,30 @@ export default {
           apiUrl = `https://api.dcns-wantit.shop/v1/points/log?page=${page}&size=10`;
       }
       axios
-        .get(apiUrl, {
-          proxy: {
-            protocol: "http",
-            host: "127.0.0.1",
-            port: 8080,
-          },
-          headers: {
-            Authorization: accessToken,
-          },
-        })
-        .then((response) => {
-          console.log(response);
-          const result = response.data;
-          this.items = result.data.pointLogResponseDtoList;
-          this.currentPage = page;
-          this.totalPage = result.data.totalPage;
-        });
+      .get(apiUrl, {
+        headers: {
+          Authorization: accessToken,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        const result = response.data;
+        this.items = result.data.pointLogResponseDtoList;
+        this.currentPage = page;
+        this.totalPage = result.data.totalPage;
+      });
     },
+
     formattedBid(price) {
       return price !== undefined ? price.toLocaleString() : "0";
     },
+
     prevPage() {
       if (this.currentPage > 1) {
         this.getPointLog(this.currentPage - 1);
       }
     },
+
     nextPage() {
       if (this.currentPage < this.totalPage) {
         this.getPointLog(this.currentPage + 1);

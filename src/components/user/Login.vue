@@ -61,6 +61,7 @@ export default {
         }
       }
     },
+
     async logIn() {
       try {
         localStorage.removeItem('accessToken');

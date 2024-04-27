@@ -69,6 +69,14 @@ export default {
     goToLoginPage() {
       this.$router.push('/login');
     },
+
+    getNewAccessToken(errorResponse) {
+      localStorage.removeItem('accessToken');
+      let newAccessToken = errorResponse.headers.authorization;
+      localStorage.setItem('accessToken', newAccessToken);
+      this.fetchUserInfo();
+    },
+
     async fetchUserInfo() {
       try {
         let accessToken = localStorage.getItem('accessToken');
@@ -81,17 +89,26 @@ export default {
           method: 'get',
           url: 'https://api.dcns-wantit.shop/v1/users',
           headers: {
-            'Authorization': accessToken // 헤더에 토큰 추가
+            'Authorization': accessToken
           }
         });
+
         const userData = response.data.data;
         this.currentNickname = userData.nickname;
         this.currentPhoneNumber = userData.phoneNumber;
         this.currentAddress = userData.address;
       } catch (error) {
-        console.error('Error fetching user info:', error);
+        if (error.response) {
+          if (error.response.status === 401 || error.response.status === 403) {
+            await this.getNewAccessToken(error.response);
+          } else {
+            console.error('Error : ', error);
+            alert('다시 로그인해주세요');
+          }
+        }
       }
     },
+
     async updateInfo() {
       let accessToken = localStorage.getItem('accessToken');
       if (!accessToken) {
@@ -109,10 +126,10 @@ export default {
             address: this.address,
           },
           headers: {
-            'Authorization': accessToken // 헤더에 토큰 추가
+            'Authorization': accessToken
           }
         });
-        // 정보 수정 성공 시 모달 표시
+
         this.modalBox = true;
       } catch (error) {
         if (error.response && error.response.data) {
