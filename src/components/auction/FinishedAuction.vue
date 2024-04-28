@@ -5,7 +5,7 @@
         <div class="finishedAuctionCard" @click="detail(item.auctionItemId)">
           <img
             :src="item.imageUrl"
-            class="card-img-top"
+            class="card-img-top image"
             alt="..."
           />
           <div class="finishedAuctionCardBody">
@@ -102,23 +102,18 @@ div {
   position: relative;
   display: flex;
   flex-direction: column;
-  min-width: 0;
   word-wrap: break-word;
   background-color: #fff;
   background-clip: border-box;
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem;
-  width: calc(33.33%);
-  height: 200px !important;
-  margin: 0.5rem 30px 0 30px;
+  width: 50%;
+  /* margin: 0.5rem 30px 0 30px; */
   cursor: pointer;
 }
 
-.finishedAuctionCard img {
+.image {
   width: 100%;
-  border-top-left-radius: calc(0.25rem - 1px);
-  border-top-right-radius: calc(0.25rem - 1px);
-  max-height: 120px !important;
   object-fit: cover !important;
 }
 
@@ -126,13 +121,12 @@ div {
   flex: 1 1 auto;
   min-height: 1px;
   padding: 1.25rem;
-  height: 50px !important;
   overflow: auto;
   text-align: center;
 }
 
 .container {
-  margin-top: 90px;
+  margin-top: 100px;
 }
 
 .pagination {

@@ -24,9 +24,7 @@
           </div>
           <div class="v-line"></div>
           <div class="right">
-            <div class="product-img">
-              <img alt="item-image" :src="item.imageUrl" />
-            </div>
+            <img alt="item-image" id="product-image" :src="item.imageUrl"/>
           </div>
         </div>
       </div>
@@ -64,12 +62,13 @@ export default {
       });
     },
     formattedBid(price) {
-      return price !== undefined ? price.toLocaleString() : '0';
+      return price !== undefined ? price.toLocaleString() : "0";
     },
-    async getAuctionItemList(category, page=1) {
+    async getAuctionItemList(category, page = 1) {
       axios
         .get(
-          `https://api.dcns-wantit.shop/v1/auction-items/in-progress?page=${page}&size=5&category=`+category,
+          `https://api.dcns-wantit.shop/v1/auction-items/in-progress?page=${page}&size=5&category=` +
+            category,
           {
             proxy: {
               protocol: "http",
@@ -122,11 +121,11 @@ export default {
 .right {
   flex: 1;
   padding: 1em;
+  width:314px
 }
 
-.product-img {
-  margin-left: 40%;
-  margin-bottom: 25%;
+#product-image {
+  width: 90% !important;
 }
 
 .card {
@@ -134,11 +133,6 @@ export default {
   padding: 30px;
   margin-bottom: 10px;
   width: 800px;
-}
-
-.product-img {
-  width: 60px;
-  height: 60px;
 }
 
 .card-body {

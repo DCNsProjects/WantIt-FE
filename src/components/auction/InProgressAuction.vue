@@ -24,9 +24,7 @@
           </div>
           <div class="v-line"></div>
           <div class="right">
-            <div class="product-img">
-              <img alt="item-image" :src="item.imageUrl" />
-            </div>
+            <img alt="item-image" :src="item.imageUrl" id="product-img" />
           </div>
         </div>
       </div>
@@ -72,13 +70,16 @@ export default {
     },
     async getAuctionItemList(page = 1) {
       axios
-        .get(`https://api.dcns-wantit.shop/v1/auction-items/in-progress?page=${page}&size=5`, {
-          proxy: {
-            protocol: "http",
-            host: "127.0.0.1",
-            port: 8080,
-          },
-        })
+        .get(
+          `https://api.dcns-wantit.shop/v1/auction-items/in-progress?page=${page}&size=5`,
+          {
+            proxy: {
+              protocol: "http",
+              host: "127.0.0.1",
+              port: 8080,
+            },
+          }
+        )
         .then((response) => {
           const result = response.data;
           console.log(result);
@@ -122,11 +123,7 @@ export default {
 .right {
   flex: 1;
   padding: 1em;
-}
-
-.product-img {
-  margin-left: 40%;
-  margin-bottom: 25%;
+  width: 314px;
 }
 
 .card {
@@ -136,9 +133,8 @@ export default {
   width: 800px;
 }
 
-.product-img {
-  width: 60px;
-  height: 60px;
+#product-img {
+  width: 90% !important;
 }
 
 .card-body {
