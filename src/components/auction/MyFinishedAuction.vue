@@ -5,18 +5,20 @@
     </div>
     <div class="items" style="margin-bottom: 40px">
       <h3 class="title">낙찰 내역</h3>
-      <article class="auctionItem" v-for="(item, index) in finishedItems" :key="index">
-        <figure class="thumbnail">
-          <img :src="item.imageUrl" width="500" height="500" />
-        </figure>
+      <article
+        class="auctionItem"
+        v-for="(item, index) in finishedItems"
+        :key="index"
+      >
+        <img :src="item.imageUrl" id="item-image" />
         <div class="auction_info">
           <div class="description">
             <dl>
               <dt>상품명</dt>
               <dd>{{ item.itemName }}</dd>
             </dl>
-            <button @click="goToDetailPage(item.auctionItemId)">
-              낙찰 내역 상세보기
+            <button @click="goToDetailPage(item.auctionItemId)" id="button-detail">
+              상세보기
             </button>
           </div>
         </div>
@@ -114,6 +116,8 @@ div {
   border-bottom: 1px solid #ddd; /* 1px 두께의 더 옅은 색상의 경계선 */
   padding-bottom: 40px; /* 경계선을 요소의 상단에서 더 위에 위치시킴 */
   padding-top: 40px; /* 경계선을 요소의 하단에서 더 아래에 위치시킴 */
+  padding-left: 40px;
+  background-color: #f2f2f2;
 }
 
 .auction_info {
@@ -127,16 +131,11 @@ div {
   margin-right: 50px; /* 오른쪽 마진 설정 */
 }
 
-.thumbnail {
-  margin-left: 0;
-  padding-left: 0;
+#item-image {
+  max-width: 30%;
+  justify-content: center;
+  margin-left: 20px;
 }
-
-.thumbnail img {
-  width: 200px;
-  height: 200px;
-}
-
 .page_title {
   width: 100%;
   max-width: 1320px;
@@ -205,5 +204,11 @@ li button {
 }
 .pagination button {
   border: none;
+}
+#button-detail{
+  background-color: antiquewhite;
+  border-radius: 10px;
+  font-size: 120%;
+  font-weight: bold;
 }
 </style>
