@@ -1,15 +1,13 @@
 <template>
   <div>
     <div class="page_title">
-      <h2 class="page_title"> 낙찰 내역 </h2>
+      <h2 class="page_title">낙찰 내역</h2>
     </div>
-    <div class="items" style="margin-bottom: 40px;">
-      <h3 class="title"> 낙찰 내역 </h3>
+    <div class="items" style="margin-bottom: 40px">
+      <h3 class="title">낙찰 내역</h3>
       <article class="auctionItem" v-for="(item, index) in finishedItems" :key="index">
         <figure class="thumbnail">
-          <img
-              :src="item.imageUrl"
-              width="500" height="500">
+          <img :src="item.imageUrl" width="500" height="500" />
         </figure>
         <div class="auction_info">
           <div class="description">
@@ -17,19 +15,19 @@
               <dt>상품명</dt>
               <dd>{{ item.itemName }}</dd>
             </dl>
-            <button @click="goToDetailPage(item.auctionItemId)">낙찰 내역 상세보기</button>
-
+            <button @click="goToDetailPage(item.auctionItemId)">
+              낙찰 내역 상세보기
+            </button>
           </div>
         </div>
       </article>
     </div>
   </div>
   <div class="pagination">
-    <button @click="prevPage" :disabled="currentPage <= 1"> &lt;</button>
+    <button @click="prevPage" :disabled="currentPage <= 1">&lt;</button>
     <span>{{ currentPage }} / {{ totalPage }}</span>
-    <button @click="nextPage" :disabled="currentPage >= totalPage"> &gt;</button>
+    <button @click="nextPage" :disabled="currentPage >= totalPage">&gt;</button>
   </div>
-
 </template>
 
 <script>
@@ -82,7 +80,7 @@ export default {
           console.error('Error : ', error);
           alert('다시 로그인해주세요');
         }
-      }
+      }    
     },
 
     prevPage() {
@@ -106,13 +104,12 @@ export default {
 
 <style scoped>
 body {
-  margin: 0
+  margin: 0;
 }
 
 div {
   box-sizing: border-box;
 }
-
 
 .items {
   display: flex;
@@ -226,4 +223,3 @@ li button {
   border: none;
 }
 </style>
-
