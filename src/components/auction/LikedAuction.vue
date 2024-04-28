@@ -63,12 +63,23 @@ export default {
     goToBidPage(auctionItemId) {
       this.$router.push(`/bids/${auctionItemId}`);
     },
+
     goToLoginPage() {
       this.$router.push('/login');
     },
+    async getNewAccessToken(errorResponse) {
+      localStorage.removeItem('accessToken');
+
+      let tokens = errorResponse.headers.authorization.split(',');
+      let newAccessToken = tokens[0];
+
+      localStorage.setItem('accessToken', newAccessToken);
+      await this.MyLikedAuctionItems();
+    },
+
     async MyLikedAuctionItems() {
       try {
-        let accessToken = localStorage.getItem('accessToken');
+        const accessToken = localStorage.getItem('accessToken');
         if (!accessToken) {
           alert('로그인 후 다시 시도해주세요.');
           this.goToLoginPage();
@@ -79,13 +90,23 @@ export default {
           url: 'https://api.dcns-wantit.shop/v1/auction-items/likes',
           params: {},
           headers: {
-            'Authorization': accessToken // 헤더에 토큰 추가
+            'Authorization': accessToken
           }
         });
         console.log('response.data.data :', response.data.data);
         this.itemList = response.data.data;
       } catch (error) {
-        console.error('Error fetching user info:', error);
+        if (error.response) {
+          if (error.response.status === 401 || error.response.status === 403) {
+            await this.getNewAccessToken(error.response);
+          } else {
+            console.error('에러 : ', error);
+            await this.getNewAccessToken(error.response);
+          }
+        } else {
+          console.error('Error : ', error);
+          alert('다시 로그인해주세요');
+        }
       }
     },
 
@@ -96,7 +117,6 @@ export default {
         this.goToLoginPage();
         return;
       }
-
       try {
         await axios({
           method: 'post',
@@ -130,6 +150,7 @@ body {
 div {
   box-sizing: border-box;
 }
+
 .page_title {
   width: 100%;
   max-width: 1320px;

@@ -3,12 +3,12 @@
     <div class="white-bg">
       <h4></h4>
       <p>선택한 경매 상품 찜하기가 되었습니다.</p>
-      <br />
+      <br/>
       <div class="button-right">
         <button
-          type="button"
-          class="btn btn-secondary btn-sm"
-          @click="TrueModalBox = false"
+            type="button"
+            class="btn btn-secondary btn-sm"
+            @click="TrueModalBox = false"
         >
           닫기
         </button>
@@ -20,12 +20,12 @@
     <div class="white-bg">
       <h4></h4>
       <p>선택한 경매 상품 찜하기가 취소 되었습니다.</p>
-      <br />
+      <br/>
       <div class="button-right">
         <button
-          type="button"
-          class="btn btn-secondary btn-sm"
-          @click="FalseModalBox = false"
+            type="button"
+            class="btn btn-secondary btn-sm"
+            @click="FalseModalBox = false"
         >
           닫기
         </button>
@@ -42,9 +42,9 @@
       <article class="auctionItem" v-for="(item, index) in itemList" :key="index">
         <figure class="thumbnail">
           <img
-            :src="item.imageUrl"
-            width="500"
-            height="500"
+              :src="item.imageUrl"
+              width="500"
+              height="500"
           />
         </figure>
         <div class="auction_info">
@@ -71,9 +71,9 @@
 
         <div class="likes">
           <button
-            type="button"
-            class="btn btn-secondary btn-lg"
-            @click="like(item.auctionItemId)"
+              type="button"
+              class="btn btn-secondary btn-lg"
+              @click="like(item.auctionItemId)"
           >
             ♥
           </button>
@@ -119,22 +119,29 @@ export default {
     goToBidPage(auctionItemId) {
       this.$router.push(`/bids/${auctionItemId}`);
     },
+
     goToLoginPage() {
       this.$router.push("/login");
     },
+
+    async getNewAccessToken(errorResponse) {
+      localStorage.removeItem('accessToken');
+
+      let tokens = errorResponse.headers.authorization.split(','); // This will split the string into an array of tokens
+      let newAccessToken = tokens[0]; // The first token
+
+      localStorage.setItem('accessToken', newAccessToken);
+      await this.MyBidList(1);
+    },
+
     async MyBidList(page = 1) {
       try {
-        let accessToken = localStorage.getItem("accessToken");
-        if (!accessToken) {
-          alert("로그인 후 다시 시도해주세요.");
-          this.goToLoginPage();
-          return;
-        }
+        const accessToken = localStorage.getItem("accessToken");
         const response = await axios({
           method: "get",
           url: `https://api.dcns-wantit.shop/v1/auction-items/bids?page=${page}&size=5`,
           headers: {
-            Authorization: accessToken,
+            'Authorization': accessToken
           },
         });
         console.log(response);
@@ -144,7 +151,18 @@ export default {
         this.totalPage = result.data.totalPage;
         console.log("response.data.data :", response.data.data);
       } catch (error) {
-        console.error("Error fetching user info:", error);
+        if (error.response) {
+          console.error('Server Response : ', error.response);
+          if (error.response.status === 401 || error.response.status === 403) {
+            await this.getNewAccessToken(error.response);
+          } else {
+            console.error('에러 : ', error);
+            await this.getNewAccessToken(error.response);
+          }
+        } else {
+          console.error('Error : ', error);
+          alert('다시 로그인해주세요');
+        }
       }
     },
 
@@ -181,11 +199,13 @@ export default {
         }
       }
     },
+
     prevPage() {
       if (this.currentPage > 1) {
         this.MyBidList(this.currentPage - 1);
       }
     },
+
     nextPage() {
       if (this.currentPage < this.totalPage) {
         this.MyBidList(this.currentPage + 1);
@@ -313,6 +333,7 @@ li button {
   transform: translate(-50%, -50%);
   text-align: center;
 }
+
 .pagination {
   background: transparent;
   border: none;

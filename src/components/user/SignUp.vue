@@ -157,10 +157,10 @@ export default {
           alert("먼저 인증 코드를 입력하세요.");
           return
         }
-        if (response.data.data) {  // 서버에서 true를 반환한 경우
+        if (response.data.data) {
           this.emailVerified = true;
           alert("인증되었습니다.");
-        } else {  // 서버에서 false를 반환한 경우
+        } else {
           this.emailVerified = false;
           alert("인증에 실패했습니다.");
         }

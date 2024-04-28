@@ -35,25 +35,25 @@
     <div class="black-bg" v-if="충전하기 == true">
       <div class="white-bg">
         <button
-          type="button"
-          class="btn-close top"
-          aria-label="Close"
-          @click="충전하기 = false"
+            type="button"
+            class="btn-close top"
+            aria-label="Close"
+            @click="충전하기 = false"
         ></button>
         <form class="d-grid gap-2 d-md-flex" role="search" style="height: 100px">
           <input
-            class="form-control me-2"
-            type="search"
-            v-model="point"
-            placeholder="충전 금액"
-            aria-label="Search"
-            style="height: 70px; margin-top: 15px"
+              class="form-control me-2"
+              type="search"
+              v-model="point"
+              placeholder="충전 금액"
+              aria-label="Search"
+              style="height: 70px; margin-top: 15px"
           />
           <button
-            class="btn btn-outline-secondary"
-            type="submit"
-            style="width: 100px; height: 70px; margin-top: 15px"
-            @click="charge"
+              class="btn btn-outline-secondary"
+              type="submit"
+              style="width: 100px; height: 70px; margin-top: 15px"
+              @click="charge"
           >
             확인
           </button>
@@ -64,25 +64,25 @@
     <div class="black-bg" v-if="출금하기 == true">
       <div class="white-bg">
         <button
-          type="button"
-          class="btn-close top"
-          aria-label="Close"
-          @click="출금하기 = false"
+            type="button"
+            class="btn-close top"
+            aria-label="Close"
+            @click="출금하기 = false"
         ></button>
         <form class="d-grid gap-2 d-md-flex" role="search" style="height: 100px">
           <input
-            class="form-control me-2"
-            type="search"
-            v-model="point"
-            placeholder="출금 금액"
-            aria-label="Search"
-            style="height: 70px; margin-top: 15px"
+              class="form-control me-2"
+              type="search"
+              v-model="point"
+              placeholder="출금 금액"
+              aria-label="Search"
+              style="height: 70px; margin-top: 15px"
           />
           <button
-            class="btn btn-outline-secondary"
-            type="submit"
-            style="width: 100px; height: 70px; margin-top: 15px"
-            @click="withdraw"
+              class="btn btn-outline-secondary"
+              type="submit"
+              style="width: 100px; height: 70px; margin-top: 15px"
+              @click="withdraw"
           >
             확인
           </button>
@@ -94,7 +94,7 @@
       <div class="card">
         <div class="card-body">
           <div
-            style="
+              style="
               margin-left: 10px;
               margin-bottom: 25px;
               font-size: larger;
@@ -114,8 +114,8 @@
     </div>
 
     <div
-      class="d-grid gap-2 d-md-flex justify-content-md-end"
-      style="height: 60px; margin-left: 15%; margin-right: 15%"
+        class="d-grid gap-2 d-md-flex justify-content-md-end"
+        style="height: 60px; margin-left: 15%; margin-right: 15%"
     >
       <button class="btn btn-secondary w-50" type="button" @click="충전하기 = true">
         충전하기
@@ -127,10 +127,10 @@
 
     <div class="d-grid gap-2;">
       <button
-        @click="gotolog"
-        class="btn btn-secondary detail"
-        type="button"
-        style="height: 50px"
+          @click="gotolog"
+          class="btn btn-secondary detail"
+          type="button"
+          style="height: 50px"
       >
         상세 내역 조회
       </button>
@@ -162,46 +162,54 @@ export default {
     gotolog() {
       this.$router.push("/point-log");
     },
+
+    getNewAccessToken(errorResponse) {
+      localStorage.removeItem('accessToken');
+      let newAccessToken = errorResponse.headers.authorization;
+      localStorage.setItem('accessToken', newAccessToken);
+      this.getPoint();
+    },
+
     async getPoint() {
-      let accessToken = localStorage.getItem("accessToken");
-      if (!accessToken) {
-        alert("로그인 후 다시 시도해주세요.");
-      }
-      axios
-        .get("https://api.dcns-wantit.shop/v1/points", {
-          proxy: {
-            protocol: "http",
-            host: "127.0.0.1",
-            port: 8080,
-          },
+      try {
+        let accessToken = localStorage.getItem("accessToken");
+        if (!accessToken) {
+          alert("로그인 후 다시 시도해주세요.");
+          return;
+        }
+        const response = await axios.get("https://api.dcns-wantit.shop/v1/points", {
           headers: {
             Authorization: accessToken,
           },
-        })
-        .then((response) => {
-          console.log(response);
-          const result = response.data;
-          this.item = result.data;
         });
+        console.log(response);
+        const result = response.data;
+        this.item = result.data;
+      } catch (error) {
+        if (error.response) {
+          if (error.response.status === 401 || error.response.status === 403) {
+            await this.getNewAccessToken(error.response);
+          }
+        } else {
+          console.error('Error : ', error);
+          alert('다시 로그인해주세요');
+        }
+      }
     },
+
     async charge() {
       try {
         const response = await axios.post(
-          "https://api.dcns-wantit.shop/v1/points/charge",
-          {
-            changedPoint: this.point,
-            details: "충전",
-          },
-          {
-            headers: {
-              Authorization: localStorage.getItem("accessToken"),
+            "https://api.dcns-wantit.shop/v1/points/charge",
+            {
+              changedPoint: this.point,
+              details: "충전",
             },
-            proxy: {
-              protocol: "http",
-              host: "127.0.0.1",
-              port: 8080,
-            },
-          }
+            {
+              headers: {
+                Authorization: localStorage.getItem("accessToken"),
+              },
+            }
         );
         console.log("충전 성공", response);
         alert("충전 성공했습니다.");
@@ -213,21 +221,16 @@ export default {
     async withdraw() {
       try {
         const response = await axios.post(
-          "https://api.dcns-wantit.shop/v1/points/withdrawal",
-          {
-            changedPoint: -this.point,
-            details: "출금",
-          },
-          {
-            headers: {
-              Authorization: localStorage.getItem("accessToken"),
+            "https://api.dcns-wantit.shop/v1/points/withdrawal",
+            {
+              changedPoint: -this.point,
+              details: "출금",
             },
-            proxy: {
-              protocol: "http",
-              host: "127.0.0.1",
-              port: 8080,
-            },
-          }
+            {
+              headers: {
+                Authorization: localStorage.getItem("accessToken"),
+              },
+            }
         );
         console.log("출금 성공", response);
         alert("출금 성공했습니다.");

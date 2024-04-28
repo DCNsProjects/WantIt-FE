@@ -251,11 +251,6 @@ export default {
     async getAuctionItem(auctionItemId) {
       axios
         .get("https://api.dcns-wantit.shop/v1/auction-items/" + auctionItemId, {
-          proxy: {
-            protocol: "http",
-            host: "127.0.0.1",
-            port: 8080,
-          },
         })
         .then((response) => {
           console.log(response);
@@ -266,18 +261,8 @@ export default {
     },
     async getTopBid(auctionItemId) {
       axios
-        .get(
-          "https://api.dcns-wantit.shop/v1/auction-items/" +
-            auctionItemId +
-            "/bids/top",
-          {
-            proxy: {
-              protocol: "http",
-              host: "127.0.0.1",
-              port: 8080,
-            },
-          }
-        )
+        .get("https://api.dcns-wantit.shop/v1/auction-items/" + auctionItemId + "/bids/top", {
+        })
         .then((response) => {
           console.log(response);
           const result = response.data;
@@ -295,11 +280,6 @@ export default {
           headers: {
             Authorization: localStorage.getItem("accessToken"),
           },
-          proxy: {
-            protocol: "http",
-            host: "127.0.0.1",
-            port: 8080,
-          },
         }
       );
     },
@@ -315,11 +295,6 @@ export default {
           {
             headers: {
               Authorization: localStorage.getItem("accessToken"),
-            },
-            proxy: {
-              protocol: "http",
-              host: "127.0.0.1",
-              port: 8080,
             },
           }
         );

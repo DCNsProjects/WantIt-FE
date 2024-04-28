@@ -2,20 +2,20 @@
   <div class="container">
     <h1 class="banner"><i class="bi bi-boxes"></i> My Auctions</h1>
     <div v-for="item in auctionItems" :key="item.id" class="auction-item">
-      <img :src="item.imageUrl" alt="Auction Item" class="item-image" />
+      <img :src="item.imageUrl" alt="Auction Item" class="item-image"/>
       <div class="item-info">
         <h2 class="title">{{ item.itemName }}</h2>
         <p class="des">{{ shortDescription(item.itemDescription) }}</p>
         <div class="info">
           <p class="bid">현재 입찰 금액: {{ formattedBid(item.minPrice) }}</p>
         </div>
-          <button
+        <button
             class="btn btn-primary"
             type="submit"
             @click="updateProduct(item.auctionItemId)"
-          >
-            경매 수정
-          </button>
+        >
+          경매 수정
+        </button>
       </div>
     </div>
   </div>
@@ -42,35 +42,48 @@ export default {
     this.getMyAuctionItems();
   },
   methods: {
-    getMyAuctionItems(page = 1) {
-      const accessToken = localStorage.getItem("accessToken");
-
-      axios
-        .get(`https://api.dcns-wantit.shop/v1/my/auction-items?page=${page}&size=5`, {
-          proxy: {
-            protocol: "http",
-            host: "127.0.0.1",
-            port: 8080,
-          },
-          headers: {
-            Authorization: accessToken,
-          },
-        })
-        .then((response) => {
-          const result = response.data;
-          this.auctionItems = result.data.responseDtoList;
-          this.currentPage = page;
-          this.totalPage = result.data.totalPage;
-        });
+    async getNewAccessToken(errorResponse) {
+      localStorage.removeItem('accessToken');
+      let newAccessToken = errorResponse.headers.authorization;
+      localStorage.setItem('accessToken', newAccessToken);
+      await this.getMyAuctionItems(1);
     },
+
+    async getMyAuctionItems(page = 1) {
+      try {
+        const accessToken = localStorage.getItem("accessToken");
+        const response = await axios.get(
+            `https://api.dcns-wantit.shop/v1/my/auction-items?page=${page}&size=5`, {
+              headers: {
+                Authorization: accessToken,
+              },
+            });
+        const result = response.data;
+        this.auctionItems = result.data.responseDtoList;
+        this.currentPage = page;
+        this.totalPage = result.data.totalPage;
+      } catch (error) {
+        if (error.response) {
+          if (error.response.status === 401 || error.response.status === 403) {
+            await this.getNewAccessToken(error.response);
+          }
+        } else {
+          console.error('Error : ', error);
+          alert('다시 로그인해주세요');
+        }
+      }
+    },
+
     formattedBid(price) {
       return price !== undefined ? price.toLocaleString() : "0";
     },
+
     shortDescription(auctionItems) {
       return auctionItems.length > 150
-        ? auctionItems.slice(0, 150) + "..."
-        : auctionItems;
+          ? auctionItems.slice(0, 150) + "..."
+          : auctionItems;
     },
+
     updateProduct(auctionItemId) {
       this.$router.push({
         name: "update-product",
@@ -80,11 +93,13 @@ export default {
         },
       });
     },
+
     prevPage() {
       if (this.currentPage > 1) {
         this.getMyAuctionItems(this.currentPage - 1);
       }
     },
+
     nextPage() {
       if (this.currentPage < this.totalPage) {
         this.getMyAuctionItems(this.currentPage + 1);
@@ -165,6 +180,7 @@ export default {
   margin-top: auto;
   justify-content: space-between;
 }
+
 .pagination {
   background: transparent;
   border: none;
@@ -181,6 +197,7 @@ export default {
 .pagination button {
   border: none;
 }
+
 li {
   margin-right: 5px;
 }
