@@ -24,9 +24,7 @@
           </div>
           <div class="v-line"></div>
           <div class="right">
-            <div class="product-img">
-              <img alt="item-image" :src="item.imageUrl" />
-            </div>
+            <img alt="item-image" :src="item.imageUrl" id="product-img" />
           </div>
         </div>
       </div>
@@ -117,11 +115,7 @@ export default {
 .right {
   flex: 1;
   padding: 1em;
-}
-
-.product-img {
-  margin-left: 40%;
-  margin-bottom: 25%;
+  width: 314px;
 }
 
 .card {
@@ -131,9 +125,8 @@ export default {
   width: 800px;
 }
 
-.product-img {
-  width: 60px;
-  height: 60px;
+#product-img {
+  width: 90% !important;
 }
 
 .card-body {

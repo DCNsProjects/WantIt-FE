@@ -165,8 +165,8 @@
   <div class="container">
     <div class="split-screen">
       <div class="left">
-        <div class="product-img">
-          <img alt="item-image" :src="item.imageUrl" />
+        <div class="image-block">
+          <img alt="item-image" id="item-image" :src="item.imageUrl" />
         </div>
       </div>
       <div class="v-line"></div>
@@ -186,7 +186,11 @@
         <div class="date">경매 종료일: {{ item.endDate }}</div>
         <hr />
         <div class="d-grid gap-4 d-md-flex justify-content-md-end bid-btn">
-          <button class="btn btn-secondary w-75" type="button" @click="입찰하기 = true">
+          <button
+            class="btn btn-secondary w-75"
+            type="button"
+            @click="makeBidModal()"
+          >
             입찰하기
           </button>
           <button class="btn btn-secondary w-25" type="button" @click="like()">
@@ -229,9 +233,18 @@ export default {
       입찰하기: false,
       bid: 0,
       auctionItemId: undefined,
+      isLoggedIn: false,
     };
   },
   methods: {
+    makeBidModal() {
+      if (this.isLoggedIn === false) {
+        alert("로그인 후 이용해주세요.");
+        this.$router.push("/login");
+      } else {
+        this.입찰하기 = true;
+      }
+    },
     formattedBid(price) {
       return price !== undefined ? price.toLocaleString() : "0";
     },
@@ -259,7 +272,9 @@ export default {
     async like() {
       console.log(localStorage.getItem("accessToken"));
       await axios.post(
-        "https://api.dcns-wantit.shop/v1/auction-items/" + this.auctionItemId + "/likes",
+        "https://api.dcns-wantit.shop/v1/auction-items/" +
+          this.auctionItemId +
+          "/likes",
         null,
         {
           headers: {
@@ -271,7 +286,9 @@ export default {
     async createBid(auctionItemId) {
       try {
         const response = await axios.post(
-          "https://api.dcns-wantit.shop/v1/auction-items/" + auctionItemId + "/bids",
+          "https://api.dcns-wantit.shop/v1/auction-items/" +
+            auctionItemId +
+            "/bids",
           {
             bidPrice: this.bid,
           },
@@ -288,31 +305,35 @@ export default {
         alert("입찰 요청에 실패했습니다. 다시 시도해주세요.");
       }
     },
+    checkLoginStatus() {
+      this.isLoggedIn = !!localStorage.getItem("accessToken");
+    },
+    sseSubscribe() {
+      //sse subscribe
+      const eventSource = new EventSource(
+        "https://api.dcns-wantit.shop/v1/live-bids/auction-items/" +
+          this.$route.params.id
+      );
+
+      eventSource.addEventListener("bidUpdate", (event) => {
+        const newPrice = JSON.parse(event.data).bidPrice;
+        this.currentPrice = newPrice;
+      });
+      eventSource.onmessage = (event) => {
+        this.currentPrice = event.data.bidPrice;
+      };
+      eventSource.onerror = (error) => {
+        console.error("error : ", error);
+        eventSource.close();
+      };
+    },
   },
   created() {
-    // const EventSource = NativeEventSource || EventSourcePolyfill;
-    const url =
-      "url : https://api.dcns-wantit.shop/v1/live-bids/auction-items/" + this.$route.params.id;
-    console.log(url);
-
-    const eventSource = new EventSource(
-      "https://api.dcns-wantit.shop/v1/live-bids/auction-items/" + this.$route.params.id
-    );
-
-    eventSource.addEventListener("bidUpdate", (event) => {
-      const newPrice = JSON.parse(event.data).bidPrice;
-      this.item.minPrice = newPrice;
-    });
-    eventSource.onmessage = (event) => {
-      this.item.minPrice = event.data.bidPrice;
-    };
-    eventSource.onerror = (error) => {
-      console.error("error : ", error);
-      eventSource.close();
-    };
-
     this.getAuctionItem(this.$route.params.id);
     this.getTopBid(this.$route.params.id);
+    this.sseSubscribe();
+    this.checkLoginStatus();
+
     this.auctionItemId = this.$route.params.id;
   },
 };
@@ -340,11 +361,16 @@ export default {
   padding-right: 50px;
   padding-left: 50px;
 }
-
-.product-img {
-  margin: 30%;
+.image-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
-
+#item-image {
+  margin: auto 0 auto 0 !important;
+  width: 90%;
+}
 .card {
   padding: 30px;
   margin-bottom: 40px;

@@ -4,60 +4,116 @@
       <div class="container d-flex flex-wrap">
         <ul class="nav me-auto align-items-center">
           <router-link to="/">
-                        <span class="wantit fs-2"><i class="bi-1 bi-wordpress"></i>
-                            원트잇</span>
+            <span class="wantit fs-2"
+              ><i class="bi-1 bi-wordpress"></i> 원트잇</span
+            >
           </router-link>
           <li class="nav-item dropdown hover-dropdown">
-            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
-               data-bs-toggle="dropdown"
-               aria-expanded="false">
+            <a
+              class="nav-link dropdown-toggle"
+              id="navbarDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
               Auctions
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" @click="inProgress">진행중인 경매</a></li>
-              <li><a class="dropdown-item" @click="scheduledAuction">예정된 경매</a></li>
-              <li><a class="dropdown-item" @click="finishedAuction">종료된 경매</a></li>
+              <li>
+                <a class="dropdown-item" @click="inProgress">진행중인 경매</a>
+              </li>
+              <li>
+                <a class="dropdown-item" @click="scheduledAuction"
+                  >예정된 경매</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" @click="finishedAuction"
+                  >종료된 경매</a
+                >
+              </li>
             </ul>
           </li>
           <li class="nav-item dropdown hover-dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-               data-bs-toggle="dropdown" aria-expanded="false">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
               Point
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li><a class="dropdown-item" @click="point">포인트 관리</a></li>
-              <li><a class="dropdown-item" @click="pointLog">포인트 내역</a></li>
+              <li>
+                <a class="dropdown-item" @click="pointLog">포인트 내역</a>
+              </li>
             </ul>
           </li>
           <li class="nav-item dropdown hover-dropdown">
-            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
-               data-bs-toggle="dropdown" aria-expanded="false">
+            <a
+              class="nav-link dropdown-toggle"
+              id="navbarDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
               My Page
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li><a class="dropdown-item" @click="updateUser">내 정보</a></li>
-              <li><a class="dropdown-item" @click="likedAuction">나의 관심 경매</a></li>
-              <li><a class="dropdown-item" @click="addProductPage">경매품 등록</a></li>
-              <li><a class="dropdown-item" @click="myAuctions">등록한 경매품 조회</a></li>
+              <li>
+                <a class="dropdown-item" @click="likedAuction"
+                  >나의 관심 경매</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" @click="addProductPage">경매품 등록</a>
+              </li>
+              <li>
+                <a class="dropdown-item" @click="myAuctions"
+                  >등록한 경매품 조회</a
+                >
+              </li>
               <li><a class="dropdown-item" @click="mybidList">입찰 내역</a></li>
-              <li><a class="dropdown-item" @click="myAuctionItemFinished">낙찰 내역</a></li>
+              <li>
+                <a class="dropdown-item" @click="myAuctionItemFinished"
+                  >낙찰 내역</a
+                >
+              </li>
             </ul>
           </li>
         </ul>
         <ul class="nav align-items-center">
-          <form class="col-12 col-lg-auto mb-3 mb-lg-0 search-bar" role="search"><i
-              class="bi bi-search"></i>
-            <input type="search" class="form-control" placeholder="상품 이름으로 검색" aria-label="Search">
+          <form
+            class="col-12 col-lg-auto mb-3 mb-lg-0 search-bar"
+            role="search"
+          >
+            <i class="bi bi-search"></i>
+            <input
+              type="search"
+              class="form-control"
+              placeholder="상품 이름으로 검색"
+              aria-label="Search"
+            />
           </form>
           <li class="nav-item" v-if="!isLoggedIn">
-            <a class="nav-link link-body-emphasis px-2" @click="loginOrLogout">로그인</a>
+            <a class="nav-link link-body-emphasis px-2" @click="loginOrLogout"
+              >로그인</a
+            >
           </li>
           <li class="nav-item" v-else>
-            <a class="nav-link link-body-emphasis px-2" @click="logout">로그아웃</a>
+            <a class="nav-link link-body-emphasis px-2" @click="logout"
+              >로그아웃</a
+            >
           </li>
 
-
-          <li class="nav-item"><a class="nav-link link-body-emphasis px-2" @click="signUp">회원가입</a>
+          <li class="nav-item">
+            <a class="nav-link link-body-emphasis px-2" @click="signUp"
+              >회원가입</a
+            >
           </li>
         </ul>
       </div>
@@ -67,11 +123,11 @@
 
 <script>
 export default {
-  name: 'vueHeader',
+  name: "vueHeader",
 
   data() {
     return {
-      isLoggedIn: false
+      isLoggedIn: false,
     };
   },
 
@@ -81,98 +137,136 @@ export default {
   },
 
   methods: {
-
     checkLoginStatus() {
-      this.isLoggedIn = !!localStorage.getItem('accessToken');
+      this.isLoggedIn = !!localStorage.getItem("accessToken");
     },
 
     loginOrLogout() {
       if (this.isLoggedIn) {
         this.logout();
       } else {
-        this.$router.push('/login');
+        this.$router.push("/login");
       }
     },
 
     logout() {
-      localStorage.removeItem('accessToken');
+      localStorage.removeItem("accessToken");
       this.isLoggedIn = false;
-      this.$router.push('/');
+      this.$router.push("/");
     },
 
     homePage() {
-      this.$router.push('/');
+      this.$router.push("/");
     },
 
     addProductPage() {
-      this.$router.push('/add-product');
+      if (this.isLoggedIn) {
+        this.$router.push("/add-product");
+      } else {
+        alert("로그인이 필요합니다.");
+        this.$router.push("/login");
+      }
     },
 
     myAuctions() {
-      this.$router.push('/my-auctions');
+      if (this.isLoggedIn) {
+        this.$router.push("/my-auctions");
+      } else {
+        alert("로그인이 필요합니다.");
+        this.$router.push("/login");
+      }
     },
 
     point() {
-      this.$router.push('/point');
+      if (this.isLoggedIn) {
+        this.$router.push("/point");
+      } else {
+        alert("로그인이 필요합니다.");
+        this.$router.push("/login");
+      }
     },
 
     pointLog() {
-      this.$router.push('/point-log');
+      if (this.isLoggedIn) {
+        this.$router.push("/point-log");
+      } else {
+        alert("로그인이 필요합니다.");
+        this.$router.push("/login");
+      }
     },
 
     inProgress() {
-      this.$router.push('/in-progress');
+      this.$router.push("/in-progress");
     },
 
     login() {
-      this.$router.push('/login');
+      this.$router.push("/login");
     },
 
     signUp() {
-      this.$router.push('/sign-up');
+      this.$router.push("/sign-up");
     },
 
     finishedAuction() {
-      this.$router.push('/finished-auctions');
+      this.$router.push("/finished-auctions");
     },
 
     likedAuction() {
-      this.$router.push('/liked-auction');
+      if(this.isLoggedIn){
+        this.$router.push("/liked-auction");
+      } else {
+        alert("로그인이 필요합니다.");
+        this.$router.push("/login");
+      }
     },
 
     updateUser() {
-      this.$router.push('/update-user');
+      if(this.isLoggedIn){
+        this.$router.push("/update-user");
+      } else {
+        alert("로그인이 필요합니다.");
+        this.$router.push("/login");
+      }
     },
 
     scheduledAuction() {
-      this.$router.push('/scheduled-auction');
+      this.$router.push("/scheduled-auction");
     },
     mybidList() {
-      this.$router.push('/auction-items/bids');
+      if (this.isLoggedIn) {
+        this.$router.push("/auction-items/bids");
+      } else {
+        alert("로그인이 필요합니다.");
+        this.$router.push("/login");
+      }
     },
     myAuctionItemFinished() {
-      this.$router.push('/auction-items/finished');
+      if (this.isLoggedIn) {
+        this.$router.push("/auction-items/finished");
+      } else {
+        alert("로그인이 필요합니다.");
+        this.$router.push("/login");
+      }
     },
   },
   watch: {
     // localStorage의 변경을 감지하여 isLoggedIn 업데이트
-    '$route'() {
+    $route() {
       this.checkLoginStatus();
-    }
-  }
-
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
 @font-face {
-  font-family: 'nngt';
-  src: url('../../assets/fonts/NanumGothic.ttf') format('truetype');
+  font-family: "nngt";
+  src: url("../../assets/fonts/NanumGothic.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'BM';
-  src: url('../../assets/fonts/BMHANNAPro.ttf') format('truetype');
+  font-family: "BM";
+  src: url("../../assets/fonts/BMHANNAPro.ttf") format("truetype");
 }
 
 a {
@@ -194,7 +288,7 @@ a {
 .nav-item {
   padding: 0 3px;
   font-size: 1.2rem;
-  font-family: 'BM';
+  font-family: "BM";
   cursor: pointer;
 }
 
@@ -203,7 +297,7 @@ a {
 }
 
 .wantit {
-  font-family: 'BM';
+  font-family: "BM";
   margin-right: 20px;
   color: black;
 }
