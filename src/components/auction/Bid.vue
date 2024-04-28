@@ -165,8 +165,8 @@
   <div class="container">
     <div class="split-screen">
       <div class="left">
-        <div class="product-img">
-          <img alt="item-image" :src="item.imageUrl" />
+        <div class="image-block">
+          <img alt="item-image" id="item-image" :src="item.imageUrl" />
         </div>
       </div>
       <div class="v-line"></div>
@@ -186,7 +186,11 @@
         <div class="date">경매 종료일: {{ item.endDate }}</div>
         <hr />
         <div class="d-grid gap-4 d-md-flex justify-content-md-end bid-btn">
-          <button class="btn btn-secondary w-75" type="button" @click="입찰하기 = true">
+          <button
+            class="btn btn-secondary w-75"
+            type="button"
+            @click="입찰하기 = true"
+          >
             입찰하기
           </button>
           <button class="btn btn-secondary w-25" type="button" @click="like()">
@@ -253,13 +257,18 @@ export default {
     },
     async getTopBid(auctionItemId) {
       axios
-        .get("https://api.dcns-wantit.shop/v1/auction-items/" + auctionItemId + "/bids/top", {
-          proxy: {
-            protocol: "http",
-            host: "127.0.0.1",
-            port: 8080,
-          },
-        })
+        .get(
+          "https://api.dcns-wantit.shop/v1/auction-items/" +
+            auctionItemId +
+            "/bids/top",
+          {
+            proxy: {
+              protocol: "http",
+              host: "127.0.0.1",
+              port: 8080,
+            },
+          }
+        )
         .then((response) => {
           console.log(response);
           const result = response.data;
@@ -269,7 +278,9 @@ export default {
     async like() {
       console.log(localStorage.getItem("accessToken"));
       await axios.post(
-        "https://api.dcns-wantit.shop/v1/auction-items/" + this.auctionItemId + "/likes",
+        "https://api.dcns-wantit.shop/v1/auction-items/" +
+          this.auctionItemId +
+          "/likes",
         null,
         {
           headers: {
@@ -286,7 +297,9 @@ export default {
     async createBid(auctionItemId) {
       try {
         const response = await axios.post(
-          "https://api.dcns-wantit.shop/v1/auction-items/" + auctionItemId + "/bids",
+          "https://api.dcns-wantit.shop/v1/auction-items/" +
+            auctionItemId +
+            "/bids",
           {
             bidPrice: this.bid,
           },
@@ -312,11 +325,13 @@ export default {
   created() {
     // const EventSource = NativeEventSource || EventSourcePolyfill;
     const url =
-      "url : https://api.dcns-wantit.shop/v1/live-bids/auction-items/" + this.$route.params.id;
+      "url : https://api.dcns-wantit.shop/v1/live-bids/auction-items/" +
+      this.$route.params.id;
     console.log(url);
 
     const eventSource = new EventSource(
-      "https://api.dcns-wantit.shop/v1/live-bids/auction-items/" + this.$route.params.id
+      "https://api.dcns-wantit.shop/v1/live-bids/auction-items/" +
+        this.$route.params.id
     );
 
     eventSource.addEventListener("bidUpdate", (event) => {
@@ -360,11 +375,16 @@ export default {
   padding-right: 50px;
   padding-left: 50px;
 }
-
-.product-img {
-  margin: 30%;
+.image-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
-
+#item-image {
+  margin: auto 0 auto 0 !important;
+  width: 90%;
+}
 .card {
   padding: 30px;
   margin-bottom: 40px;
