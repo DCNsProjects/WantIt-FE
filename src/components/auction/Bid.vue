@@ -189,7 +189,7 @@
           <button
             class="btn btn-secondary w-75"
             type="button"
-            @click="입찰하기 = true"
+            @click="makeBidModal()"
           >
             입찰하기
           </button>
@@ -233,9 +233,18 @@ export default {
       입찰하기: false,
       bid: 0,
       auctionItemId: undefined,
+      isLoggedIn: false,
     };
   },
   methods: {
+    makeBidModal() {
+      if (this.isLoggedIn === false) {
+        alert("로그인 후 이용해주세요.");
+        this.$router.push("/login");
+      } else {
+        this.입찰하기 = true;
+      }
+    },
     formattedBid(price) {
       return price !== undefined ? price.toLocaleString() : "0";
     },
@@ -321,33 +330,35 @@ export default {
         alert("입찰 요청에 실패했습니다. 다시 시도해주세요.");
       }
     },
+    checkLoginStatus() {
+      this.isLoggedIn = !!localStorage.getItem("accessToken");
+    },
+    sseSubscribe() {
+      //sse subscribe
+      const eventSource = new EventSource(
+        "https://api.dcns-wantit.shop/v1/live-bids/auction-items/" +
+          this.$route.params.id
+      );
+
+      eventSource.addEventListener("bidUpdate", (event) => {
+        const newPrice = JSON.parse(event.data).bidPrice;
+        this.currentPrice = newPrice;
+      });
+      eventSource.onmessage = (event) => {
+        this.currentPrice = event.data.bidPrice;
+      };
+      eventSource.onerror = (error) => {
+        console.error("error : ", error);
+        eventSource.close();
+      };
+    },
   },
   created() {
-    // const EventSource = NativeEventSource || EventSourcePolyfill;
-    const url =
-      "url : https://api.dcns-wantit.shop/v1/live-bids/auction-items/" +
-      this.$route.params.id;
-    console.log(url);
-
-    const eventSource = new EventSource(
-      "https://api.dcns-wantit.shop/v1/live-bids/auction-items/" +
-        this.$route.params.id
-    );
-
-    eventSource.addEventListener("bidUpdate", (event) => {
-      const newPrice = JSON.parse(event.data).bidPrice;
-      this.item.minPrice = newPrice;
-    });
-    eventSource.onmessage = (event) => {
-      this.item.minPrice = event.data.bidPrice;
-    };
-    eventSource.onerror = (error) => {
-      console.error("error : ", error);
-      eventSource.close();
-    };
-
     this.getAuctionItem(this.$route.params.id);
     this.getTopBid(this.$route.params.id);
+    this.sseSubscribe();
+    this.checkLoginStatus();
+
     this.auctionItemId = this.$route.params.id;
   },
 };
