@@ -1,6 +1,10 @@
 <template>
   <!-- top3 -->
-  <div id="myCarousel" class="carousel slide mb-3" data-bs-ride="carousel" v-if = "items.length > 2">
+  <div
+    id="myCarousel"
+    class="carousel slide mb-3"
+    data-bs-ride="carousel"
+    v-if="items.length > 2" >
     <div class="carousel-indicators">
       <button
         type="button"
@@ -27,21 +31,18 @@
     </div>
     <div class="carousel-inner">
       <div class="carousel-item">
-        <svg
-          class="bd-placeholder-img"
-          width="100%"
-          height="100%"
-          src=""
+        <img
+          class="bd-placeholder-img carousel-item-image"
+          :src="items[0].imageUrl"
           aria-hidden="true"
           preserveAspectRatio="xMidYMid slice"
           focusable="false"
-        >
-          <rect
-            width="100%"
-            height="100%"
-            fill="var(--bs-secondary-color)"
-          ></rect>
-        </svg>
+        />
+        <rect
+          width="100%"
+          height="100%"
+          fill="var(--bs-secondary-color)"
+        ></rect>
         <div class="container">
           <div class="carousel-caption text-start">
             <h1>실시간 입찰 수 1위</h1>
@@ -60,21 +61,18 @@
         </div>
       </div>
       <div class="carousel-item">
-        <svg
-          class="bd-placeholder-img"
-          width="100%"
-          height="100%"
-          :src="items[0].imageUrl"
+        <img
+          class="bd-placeholder-img carousel-item-image"
+          :src="items[1].imageUrl"
           aria-hidden="true"
           preserveAspectRatio="xMidYMid slice"
           focusable="false"
-        >
-          <rect
-            width="100%"
-            height="100%"
-            fill="var(--bs-secondary-color)"
-          ></rect>
-        </svg>
+        />
+        <rect
+          width="100%"
+          height="100%"
+          fill="var(--bs-secondary-color)"
+        ></rect>
         <div class="container">
           <div class="carousel-caption">
             <h1>실시간 입찰 수 2위</h1>
@@ -93,21 +91,19 @@
         </div>
       </div>
       <div class="carousel-item active">
-        <svg
-          class="bd-placeholder-img"
-          width="100%"
-          height="100%"
-          src=""
+        <img
+          class="bd-placeholder-img carousel-item-image"
+          :src="items[2].imageUrl"
           aria-hidden="true"
           preserveAspectRatio="xMidYMid slice"
           focusable="false"
-        >
-          <rect
-            width="100%"
-            height="100%"
-            fill="var(--bs-secondary-color)"
-          ></rect>
-        </svg>
+        />
+        <rect
+          width="100%"
+          height="100%"
+          fill="var(--bs-secondary-color)"
+        ></rect>
+
         <div class="container">
           <div class="carousel-caption text-end">
             <h1>실시간 입찰 수 3위</h1>
@@ -290,8 +286,7 @@ export default {
   methods: {
     async getTop3() {
       axios
-        .get("https://api.dcns-wantit.shop/v1/auction-items/top3", {
-        })
+        .get("https://api.dcns-wantit.shop/v1/auction-items/top3", {})
         .then((response) => {
           console.log(response);
           const result = response.data;
@@ -345,6 +340,11 @@ export default {
 
 .carousel {
   margin-bottom: -20px;
+  background-color: #f7f2f8;
+}
+.carousel-item-image{
+  width: 100%;
+  height: 100%;
 }
 
 @font-face {
