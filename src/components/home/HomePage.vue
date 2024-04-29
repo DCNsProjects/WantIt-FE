@@ -343,7 +343,6 @@ export default {
   background-color: #f7f2f8;
 }
 .carousel-item-image{
-  align-self: center;
   width: 100%;
   height: 100%;
 }
