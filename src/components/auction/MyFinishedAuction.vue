@@ -61,7 +61,7 @@ export default {
       try {
         const accessToken = localStorage.getItem("accessToken");
         const response = await axios.get(
-            `https://api.dcns-wantit.shop/v1/auction-items/finished?page=${page}&size=5`, {
+            `https://api.dcns-wantit.shop/v1/my/auction-items/finished?page=${page}&size=5`, {
               headers: {
                 'Authorization': accessToken
               }
