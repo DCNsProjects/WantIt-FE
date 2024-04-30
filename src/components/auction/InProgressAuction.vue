@@ -11,7 +11,7 @@
               경매 시작가 : {{ formattedBid(item.minPrice) }} 원
             </div>
             <div style="margin-left: -10%; margin-top: 10px">
-              경매 마감일 : {{ converDate(item.endDate) }} 19:00 까지
+              경매 마감일 : {{ convertDate(item.endDate) }} 19:00 까지
             </div>
             <button
               type="button"
@@ -64,7 +64,7 @@ export default {
     formattedBid(price) {
       return price !== undefined ? price.toLocaleString() : "0";
     },
-    converDate(date) {
+    convertDate(date) {
       let parts = date.split("T");
       return parts[0];
     },

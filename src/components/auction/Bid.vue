@@ -183,7 +183,7 @@
             <div>{{ item.itemDescription }}</div>
           </div>
         </div>
-        <div class="date">경매 종료일: {{ item.endDate }}</div>
+        <div class="date">경매 종료일: {{ item.endDate ? convertDate(item.endDate) : '' }} 일 19:00 시</div>
         <hr />
         <div class="d-grid gap-4 d-md-flex justify-content-md-end bid-btn">
           <button
@@ -247,6 +247,10 @@ export default {
     },
     formattedBid(price) {
       return price !== undefined ? price.toLocaleString() : "0";
+    },
+    convertDate(date) {
+      let parts = date.split("T");
+      return parts[0];
     },
     async getAuctionItem(auctionItemId) {
       axios
